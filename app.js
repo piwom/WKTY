@@ -21,7 +21,7 @@ const CREDITOS = [
   { rol: 'Teclados y sintetizadores',     nombre: 'Julián Cosenza',       ig: 'piwom' },
   { rol: 'Batería',                       nombre: 'Agustín Morán Fus',    ig: 'thewailord' },
   { rol: 'Guitarras',                     nombre: 'Federico Rodríguez',   ig: 'fede.apellido' },
-  { rol: 'Percusión',                     nombre: 'Emilio',               ig: 'boxy_emilio' },
+  { rol: 'Percusión',                     nombre: 'Emilio García',               ig: 'boxy_emilio' },
   { rol: 'Voces y coros',                 nombre: 'Carolina Rodríguez',   ig: 'carito_chicharra' },
   { rol: 'Voces y coros',                 nombre: 'Andy Jud',             ig: 'andyjud.b' },
   { rol: 'Drum Doctor',                   nombre: 'Jonny Dona',           ig: 'jonnydona' },
@@ -327,18 +327,8 @@ const io = new IntersectionObserver((entries) => {
 document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => { el.setAttribute('data-once',''); io.observe(el); });
 
 /* ─── parallax band photo ─── */
-const fotoImg = document.querySelector('.foto-img');
-const fotoWrap = document.querySelector('.foto-wrap');
-function parallax() {
-  if (!fotoImg || !fotoWrap) return;
-  const rect = fotoWrap.getBoundingClientRect();
-  if (rect.bottom < 0 || rect.top > innerHeight) return;
-  const progress = (rect.top + rect.height/2) / (innerHeight + rect.height/2);
-  const offset = (0.5 - progress) * 60; // -30..30
-  fotoImg.style.transform = `translateY(${offset}px)`;
-}
-window.addEventListener('scroll', parallax, { passive: true });
-parallax();
+
+
 
 /* ─── cursor / touch trail ─── */
 let trailLast = 0;
