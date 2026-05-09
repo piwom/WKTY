@@ -68,11 +68,12 @@ body::after {
 
 .intro-eyebrow {
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: .5em;
-  color: var(--gray-300);
+  font-size: 13px;
+  letter-spacing: .28em;
+  color: #888;
   text-transform: uppercase;
-  opacity: 0; animation: fadeUp .7s var(--easing) .2s forwards;
+  animation: fadeUp .7s var(--easing) .2s both;
+  animation-fill-mode: both;
 }
 
 .intro-logo {
