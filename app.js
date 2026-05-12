@@ -329,16 +329,8 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-/* ─── scroll reveals (IntersectionObserver) ─── */
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('in');
-      if (e.target.hasAttribute('data-once')) io.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => { el.setAttribute('data-once',''); io.observe(el); });
+/* ─── scroll reveals — forzar todo visible ─── */
+document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => el.classList.add('in'));
 
 /* ─── parallax band photo — disabled ─── */
 
