@@ -1,4 +1,7 @@
 :root { color-scheme: only light; }
+html { forced-color-adjust: none; -webkit-forced-color-adjust: none; }
+@media (forced-colors: active) { * { forced-color-adjust: none; } }
+@media (prefers-color-scheme: dark) { html { filter: none !important; } }
 /* ═══════════════════════════════════════════════════
    WAKITOKYS — ¿A dónde va?
    Mobile-first interactive unboxing
