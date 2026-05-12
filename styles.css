@@ -70,10 +70,9 @@ body::after {
   font-family: var(--font-mono);
   font-size: 13px;
   letter-spacing: .28em;
-  color: #888;
+  color: var(--gray-300);
   text-transform: uppercase;
-  animation: fadeUp .7s var(--easing) .2s both;
-  animation-fill-mode: both;
+  opacity: 0; animation: fadeUp .7s var(--easing) .2s forwards;
 }
 
 .intro-logo {
@@ -99,25 +98,26 @@ body::after {
 .intro-cta {
   margin-top: 18px;
   border: 1px solid var(--white);
-  background: transparent;
-  color: var(--white);
   padding: 17px 38px;
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: .35em;
   text-transform: uppercase;
-  display: block;
-  width: auto;
-  cursor: pointer;
-  opacity: 0;
-  animation: fadeUp .7s var(--easing) 1.25s both;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  position: relative;
-  z-index: 10;
+  position: relative; overflow: hidden;
+  opacity: 0; animation: fadeUp .7s var(--easing) 1.25s forwards;
+  transition: color .35s, background .35s;
 }
-.intro-cta:hover, .intro-cta:active { background: var(--white); color: var(--black); }
-.intro-cta .arr { display: inline-block; margin-left: 4px; }
+.intro-cta::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--white);
+  transform: translateY(101%);
+  transition: transform .35s var(--easing);
+  z-index: -1;
+}
+.intro-cta:hover::before, .intro-cta:active::before { transform: translateY(0); }
+.intro-cta:hover, .intro-cta:active { color: var(--black); }
+.intro-cta .arr { display: inline-block; transition: transform .35s; margin-left: 4px; }
+.intro-cta:hover .arr { transform: translateX(4px); }
 
 .intro-fecha {
   margin-top: 8px;
@@ -406,7 +406,7 @@ body::after {
   height: 65vh; min-height: 360px; max-height: 700px;
 }
 .foto-img {
-  width: 100%; height: 100%; object-fit: contain; object-position: center center; background: #000;
+  width: 100%; height: 120%; object-fit: cover; object-position: center 30%;
   filter: grayscale(100%) contrast(1.05);
   transition: transform .15s linear;
   position: absolute; top: -10%; left: 0;
