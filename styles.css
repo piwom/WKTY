@@ -142,8 +142,7 @@ body::after {
 .intro-corner .blink { display: inline-block; width: 6px; height: 6px; background: #ff3838; border-radius: 50%; vertical-align: middle; margin-right: 8px; animation: pulse 1.4s ease-in-out infinite; }
 
 /* ═══ MAIN ════════════════════════════════════════════ */
-#main { opacity: 0; transition: opacity 1.2s var(--easing); padding-bottom: 110px; }
-#main.on { opacity: 1; }
+#main { opacity: 1; padding-bottom: 110px; }
 
 /* ═══ HERO ════════════════════════════════════════════ */
 #hero {
