@@ -206,9 +206,10 @@ function uiUpdate() {
 
 function tick() {
   const c = aud.currentTime;
-  const dur = aud.duration || 0; document.getElementById('pb-fill').style.width = (dur > 0 ? Math.min(c/dur, 1)*100 : 0) + '%';
-  document.getElementById('pb-cur').textContent = fmt(c); document.getElementById('pb-total').textContent = fmt(aud.duration || 0);, 100);
-  }
+  const dur = aud.duration || 0;
+  document.getElementById('pb-fill').style.width = (dur > 0 ? Math.min(c/dur, 1)*100 : 0) + '%';
+  document.getElementById('pb-cur').textContent = fmt(c);
+  document.getElementById('pb-total').textContent = fmt(dur);
   if (playing) raf = requestAnimationFrame(tick);
 }
 function stopFade() { if (fadeTimer) { clearInterval(fadeTimer); fadeTimer = null; } }
