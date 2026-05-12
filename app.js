@@ -128,7 +128,11 @@ window.enter = enter;
 // fallback touch para el botón en móvil
 document.addEventListener('DOMContentLoaded', () => {
   const cta = document.querySelector('.intro-cta');
-  if (cta) cta.addEventListener('touchend', (e) => { e.preventDefault(); enter(); });
+  if (cta) {
+    cta.addEventListener('touchstart', (e) => { e.stopPropagation(); }, { passive: true });
+    cta.addEventListener('touchend', (e) => { e.preventDefault(); e.stopPropagation(); enter(); }, { passive: false });
+    cta.addEventListener('click', () => { enter(); });
+  }
 });
 
 /* ─── audio player ─── */

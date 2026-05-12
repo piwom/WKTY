@@ -99,30 +99,25 @@ body::after {
 .intro-cta {
   margin-top: 18px;
   border: 1px solid var(--white);
+  background: transparent;
+  color: var(--white);
   padding: 17px 38px;
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: .35em;
   text-transform: uppercase;
-  position: relative; overflow: hidden;
-  opacity: 0; animation: fadeUp .7s var(--easing) 1.25s both;
-  animation-fill-mode: both;
-  transition: color .35s, background .35s;
+  display: block;
+  width: auto;
   cursor: pointer;
+  opacity: 0;
+  animation: fadeUp .7s var(--easing) 1.25s both;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  position: relative;
+  z-index: 10;
 }
-.intro-cta::before {
-  content: ''; position: absolute; inset: 0;
-  background: var(--white);
-  transform: translateY(101%);
-  transition: transform .35s var(--easing);
-  z-index: -1;
-}
-.intro-cta:hover::before, .intro-cta:active::before { transform: translateY(0); }
-.intro-cta:hover, .intro-cta:active { color: var(--black); }
-.intro-cta .arr { display: inline-block; transition: transform .35s; margin-left: 4px; }
-.intro-cta:hover .arr { transform: translateX(4px); }
+.intro-cta:hover, .intro-cta:active { background: var(--white); color: var(--black); }
+.intro-cta .arr { display: inline-block; margin-left: 4px; }
 
 .intro-fecha {
   margin-top: 8px;
