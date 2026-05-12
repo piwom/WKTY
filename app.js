@@ -197,7 +197,7 @@ function uiUpdate() {
 
 function tick() {
   const c = aud.currentTime;
-  const dur = aud.duration || 0; document.getElementById('pb-fill').style.width = (dur > 0 ? (c/dur)*100 : 0) + '%';
+  document.getElementById('pb-fill').style.width = (Math.min(c/PREVIEW_LIMIT, 1)*100) + '%';
   document.getElementById('pb-cur').textContent = fmt(c);
   if (c >= FADE_START && !fadeTimer) {
     fadeTimer = setInterval(() => {
@@ -220,7 +220,7 @@ function fmt(s) { return Math.floor(s/60) + ':' + Math.floor(s%60).toString().pa
 document.getElementById('pb-progress').addEventListener('click', (e) => {
   if (curIdx < 0) return;
   const r = e.currentTarget.getBoundingClientRect();
-  aud.currentTime = (e.clientX - r.left)/r.width * (aud.duration || 0);
+  aud.currentTime = Math.min((e.clientX - r.left)/r.width * PREVIEW_LIMIT, PREVIEW_LIMIT);
   aud.volume = 1; stopFade(); if (!playing) play();
 });
 
