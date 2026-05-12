@@ -765,14 +765,10 @@ body::after {
 @keyframes trailFade { 0% { opacity: .9; transform: translate(-50%,-50%) scale(1); } 100% { opacity: 0; transform: translate(-50%,-50%) scale(.3); } }
 
 /* scroll reveals */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity .9s var(--easing), transform .9s var(--easing);
-}
-.reveal.in { opacity: 1; transform: translateY(0); }
-.reveal-stagger > * { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--easing), transform .7s var(--easing); }
-.reveal-stagger.in > * { opacity: 1; transform: translateY(0); }
+.reveal { opacity: 1; transform: none; }
+.reveal.in { opacity: 1; transform: none; }
+.reveal-stagger > * { opacity: 1; transform: none; }
+.reveal-stagger.in > * { opacity: 1; transform: none; }
 .reveal-stagger.in > *:nth-child(2) { transition-delay: .07s; }
 .reveal-stagger.in > *:nth-child(3) { transition-delay: .14s; }
 .reveal-stagger.in > *:nth-child(4) { transition-delay: .21s; }
