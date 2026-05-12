@@ -105,8 +105,12 @@ body::after {
   letter-spacing: .35em;
   text-transform: uppercase;
   position: relative; overflow: hidden;
-  opacity: 0; animation: fadeUp .7s var(--easing) 1.25s forwards;
+  opacity: 0; animation: fadeUp .7s var(--easing) 1.25s both;
+  animation-fill-mode: both;
   transition: color .35s, background .35s;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 .intro-cta::before {
   content: ''; position: absolute; inset: 0;

@@ -125,6 +125,11 @@ function enter(){
   try { ensureAudioCtx(); } catch(e){}
 }
 window.enter = enter;
+// fallback touch para el botón en móvil
+document.addEventListener('DOMContentLoaded', () => {
+  const cta = document.querySelector('.intro-cta');
+  if (cta) cta.addEventListener('touchend', (e) => { e.preventDefault(); enter(); });
+});
 
 /* ─── audio player ─── */
 const PREVIEW_LIMIT = null; // sin límite
