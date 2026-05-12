@@ -21,6 +21,7 @@ const CREDITOS = [
   { rol: 'Teclados y sintetizadores',     nombre: 'Julián Cosenza',       ig: 'piwom' },
   { rol: 'Batería',                       nombre: 'Agustín Morán Fus',    ig: 'thewailord' },
   { rol: 'Guitarras',                     nombre: 'Federico Rodríguez',   ig: 'fede.apellido' },
+  { rol: 'Guitarras',                     nombre: 'Lautaro Vazquez',      ig: 'lauta.vazquez' },
   { rol: 'Percusión',                     nombre: 'Emilio García',               ig: 'boxy_emilio' },
   { rol: 'Voces y coros',                 nombre: 'Carolina Rodríguez',   ig: 'carito_chicharra' },
   { rol: 'Voces y coros',                 nombre: 'Andy Jud',             ig: 'andyjud.b' },
