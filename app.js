@@ -171,7 +171,7 @@ function load(i) {
   aud.src = TRACKS[i].src;
   aud.currentTime = 0; aud.volume = 1;
   document.getElementById('pb-name').textContent = TRACKS[i].name;
-  document.getElementById('pb-meta').innerHTML = `<span class="live-dot"></span> Preview · ${TRACKS[i].mood}`;
+  document.getElementById('pb-meta').innerHTML = `<span class="live-dot"></span> ${TRACKS[i].mood}`;
   document.getElementById('pb-cover').style.backgroundImage = "url('assets/img/cover.jpg')";
   bar.classList.add('on');
   /* scroll active card into center on programmatic load */
@@ -236,6 +236,11 @@ document.getElementById('pb-progress').addEventListener('click', (e) => {
   const r = e.currentTarget.getBoundingClientRect();
   aud.currentTime = Math.min((e.clientX - r.left)/r.width * PREVIEW_LIMIT, PREVIEW_LIMIT);
   aud.volume = 1; stopFade(); if (!playing) play();
+});
+
+aud.addEventListener('loadedmetadata', () => {
+  const el = document.getElementById('pb-total');
+  if (el) el.textContent = fmt(aud.duration || 0);
 });
 
 aud.addEventListener('ended', () => {
