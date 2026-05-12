@@ -127,6 +127,19 @@ function enter(){
 }
 window.enter = enter;
 
+/* bind intro button — más confiable que onclick en mobile */
+(function() {
+  var btn = document.getElementById('intro-cta-btn');
+  if (!btn) return;
+  function doEnter(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    enter();
+  }
+  btn.addEventListener('click', doEnter);
+  btn.addEventListener('touchend', doEnter, { passive: false });
+})();
+
 /* ─── audio player ─── */
 const PREVIEW_LIMIT = Infinity;
 const FADE_START = Infinity;
@@ -327,19 +340,7 @@ const io = new IntersectionObserver((entries) => {
 }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
 document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => { el.setAttribute('data-once',''); io.observe(el); });
 
-/* ─── parallax band photo ─── */
-const fotoImg = document.querySelector('.foto-img');
-const fotoWrap = document.querySelector('.foto-wrap');
-function parallax() {
-  if (!fotoImg || !fotoWrap) return;
-  const rect = fotoWrap.getBoundingClientRect();
-  if (rect.bottom < 0 || rect.top > innerHeight) return;
-  const progress = (rect.top + rect.height/2) / (innerHeight + rect.height/2);
-  const offset = (0.5 - progress) * 60; // -30..30
-  fotoImg.style.transform = `translateY(${offset}px)`;
-}
-window.addEventListener('scroll', parallax, { passive: true });
-parallax();
+/* ─── parallax band photo — disabled ─── */
 
 /* ─── cursor / touch trail ─── */
 let trailLast = 0;
