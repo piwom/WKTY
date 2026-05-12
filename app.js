@@ -127,8 +127,8 @@ function enter(){
 window.enter = enter;
 
 /* ─── audio player ─── */
-const PREVIEW_LIMIT = 60;
-const FADE_START = 50;
+const PREVIEW_LIMIT = null; // sin límite
+const FADE_START = null; // sin fade
 const aud = document.getElementById('aud');
 const bar = document.getElementById('player-bar');
 let curIdx = -1, playing = false, raf = null, fadeTimer = null;
@@ -197,22 +197,10 @@ function uiUpdate() {
 
 function tick() {
   const c = aud.currentTime;
-  document.getElementById('pb-fill').style.width = (Math.min(c/PREVIEW_LIMIT, 1)*100) + '%';
-  document.getElementById('pb-cur').textContent = fmt(c);
-  if (c >= FADE_START && !fadeTimer) {
-    fadeTimer = setInterval(() => {
-      const rem = PREVIEW_LIMIT - aud.currentTime;
-      aud.volume = Math.max(0, rem/(PREVIEW_LIMIT-FADE_START));
-      if (rem <= 0) {
-        aud.pause(); aud.currentTime = 0; aud.volume = 1; stopFade();
-        playing = false; uiUpdate();
-        if (curIdx >= 0) trackCards[curIdx].classList.remove('playing');
-        document.getElementById('pb-fill').style.width = '0%';
-        document.getElementById('pb-cur').textContent = '0:00';
-      }
-    }, 100);
+  const dur = aud.duration || 0; document.getElementById('pb-fill').style.width = (dur > 0 ? Math.min(c/dur, 1)*100 : 0) + '%';
+  document.getElementById('pb-cur').textContent = fmt(c); document.getElementById('pb-total').textContent = fmt(aud.duration || 0);, 100);
   }
-  if (playing && aud.currentTime < PREVIEW_LIMIT) raf = requestAnimationFrame(tick);
+  if (playing) raf = requestAnimationFrame(tick);
 }
 function stopFade() { if (fadeTimer) { clearInterval(fadeTimer); fadeTimer = null; } }
 function fmt(s) { return Math.floor(s/60) + ':' + Math.floor(s%60).toString().padStart(2,'0'); }
@@ -220,7 +208,7 @@ function fmt(s) { return Math.floor(s/60) + ':' + Math.floor(s%60).toString().pa
 document.getElementById('pb-progress').addEventListener('click', (e) => {
   if (curIdx < 0) return;
   const r = e.currentTarget.getBoundingClientRect();
-  aud.currentTime = Math.min((e.clientX - r.left)/r.width * PREVIEW_LIMIT, PREVIEW_LIMIT);
+  aud.currentTime = (e.clientX - r.left)/r.width * (aud.duration || 0);
   aud.volume = 1; stopFade(); if (!playing) play();
 });
 
