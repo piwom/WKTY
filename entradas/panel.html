@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAKITOKYS · Panel de ingreso</title>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --ink: #0A0A0A;
+            --paper: #F2EDE3;
+            --paper-dim: #C9C3B6;
+            --line: rgba(242, 237, 227, 0.14);
+            --line-strong: rgba(242, 237, 227, 0.32);
+            --accent: #FF3D2E;
+            --ok: #B6FF3A;
+            --warn: #FFB23D;
+            --bad: #FF3D2E;
+            
+            --font-display: "Anton", "Impact", "Helvetica Neue Condensed", sans-serif;
+            --font-body: "Archivo", "Helvetica Neue", system-ui, sans-serif;
+            --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--ink);
+            color: var(--paper);
+            min-height: 100vh;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.07;
+            mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+            z-index: 1;
+        }
+
+        .display {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: -0.01em;
+            line-height: 0.86;
+            font-weight: 400;
+        }
+
+        .mono {
+            font-family: var(--font-mono);
+            font-feature-settings: "tnum" 1;
+        }
+
+        /* Login */
+        .login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-box {
+            background: var(--ash);
+            border: 1.5px solid var(--line-strong);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px;
+        }
+
+        .login-box h2 {
+            font-family: var(--font-display);
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 32px;
+            line-height: 0.9;
+        }
+
+        .password-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 24px;
+        }
+
+        .password-field label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--paper-dim);
+        }
+
+        .password-field input {
+            background: transparent;
+            border: none;
+            border-bottom: 1.5px solid var(--line-strong);
+            color: var(--paper);
+            font-family: var(--font-body);
+            font-size: 18px;
+            padding: 10px 0 12px;
+            outline: none;
+        }
+
+        .password-field input:focus {
+            border-bottom-color: var(--accent);
+        }
+
+        .btn-hard {
+            display: block;
+            width: 100%;
+            background: var(--paper);
+            color: var(--ink);
+            border: none;
+            padding: 22px;
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            font-size: 28px;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: background 90ms;
+        }
+
+        .btn-hard:hover {
+            background: var(--accent);
+        }
+
+        .btn-hard:active {
+            transform: translate(1px, 1px);
+        }
+
+        /* App */
+        .app {
+            display: none;
+            position: relative;
+            z-index: 2;
+        }
+
+        .app.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            border-bottom: 1.5px solid var(--line-strong);
+            padding-bottom: 20px;
+            margin-bottom: 28px;
+        }
+
+        .header-title {
+            font-size: clamp(32px, 6vw, 48px);
+            line-height: 0.86;
+            margin-bottom: 8px;
+        }
+
+        .header-subtitle {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--paper-dim);
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: var(--ash);
+            border: 1.5px solid var(--line);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 48px;
+            line-height: 1;
+            display: block;
+        }
+
+        .stat-label {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--paper-dim);
+            margin-top: 6px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 24px;
+            border-bottom: 1.5px solid var(--line-strong);
+        }
+
+        .tab {
+            padding: 14px 22px;
+            background: transparent;
+            border: none;
+            color: var(--paper-dim);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 90ms;
+        }
+
+        .tab.active {
+            color: var(--paper);
+            border-bottom-color: var(--accent);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Scanner */
+        #reader {
+            border: 1.5px solid var(--line-strong);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        /* Result card */
+        .result {
+            background: var(--ash);
+            border: 1.5px solid var(--line-strong);
+            padding: 24px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result.success {
+            background: var(--ok);
+            color: var(--ink);
+            border-color: var(--ok);
+        }
+
+        .result.warning {
+            border-color: var(--warn);
+        }
+
+        .result.error {
+            border-color: var(--bad);
+        }
+
+        .result-header {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+
+        .result-title {
+            font-family: var(--font-display);
+            font-size: 56px;
+            line-height: 0.9;
+            margin-bottom: 16px;
+        }
+
+        .result-info {
+            margin: 8px 0;
+            font-size: 15px;
+        }
+
+        .result-info strong {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            display: inline-block;
+            width: 100px;
+            opacity: 0.7;
+        }
+
+        /* Search */
+        .search-input {
+            width: 100%;
+            padding: 14px 0;
+            background: transparent;
+            border: none;
+            border-bottom: 1.5px solid var(--line-strong);
+            color: var(--paper);
+            font-family: var(--font-body);
+            font-size: 18px;
+            outline: none;
+            margin-bottom: 24px;
+        }
+
+        .search-input:focus {
+            border-bottom-color: var(--accent);
+        }
+
+        .search-input::placeholder {
+            color: rgba(242, 237, 227, 0.35);
+        }
+
+        /* List */
+        .ticket-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .ticket-item {
+            background: var(--ash);
+            border: 1.5px solid var(--line);
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ticket-item.usado {
+            opacity: 0.5;
+        }
+
+        .ticket-info h4 {
+            font-family: var(--font-display);
+            font-size: 20px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            line-height: 1;
+        }
+
+        .ticket-info p {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--paper-dim);
+            letter-spacing: 0.1em;
+        }
+
+        .badge {
+            padding: 6px 14px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+        }
+
+        .badge.pendiente {
+            background: var(--warn);
+            color: var(--ink);
+        }
+
+        .badge.usado {
+            background: transparent;
+            border: 1.5px solid var(--line-strong);
+            color: var(--paper-dim);
+        }
+
+        /* Buttons */
+        .action-btn {
+            width: 100%;
+            padding: 16px;
+            margin-top: 16px;
+            background: var(--paper);
+            color: var(--ink);
+            border: none;
+            font-family: var(--font-display);
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: background 90ms;
+        }
+
+        .action-btn:hover {
+            background: var(--accent);
+        }
+
+        .action-btn.secondary {
+            background: transparent;
+            color: var(--paper);
+            border: 1.5px solid var(--line-strong);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--paper-dim);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @keyframes scanline {
+            0%, 100% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <h2 class="display">PANEL<br>DE<br>INGRESO</h2>
+            <form id="loginForm">
+                <div class="password-field">
+                    <label>Contraseña</label>
+                    <input type="password" id="passwordInput" required autocomplete="off">
+                </div>
+                <button type="submit" class="btn-hard">Ingresar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- APP -->
+    <div class="app" id="app">
+        <div class="container">
+            <header>
+                <h1 class="display header-title">WAKITOKYS<br>PANEL</h1>
+                <p class="mono header-subtitle">08/07/2026 · Tanque Cultural</p>
+            </header>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="totalReservas">0</span>
+                    <span class="stat-label">Reservas</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="totalEntradas">0</span>
+                    <span class="stat-label">Entradas</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="totalIngresados">0</span>
+                    <span class="stat-label">Ingresados</span>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('scan', event)">Escanear QR</button>
+                <button class="tab" onclick="switchTab('search', event)">Buscar</button>
+                <button class="tab" onclick="switchTab('list', event)">Listado</button>
+            </div>
+
+            <!-- TAB: SCAN -->
+            <div class="tab-content active" id="scanTab">
+                <div id="reader"></div>
+                <div class="result" id="scanResult"></div>
+            </div>
+
+            <!-- TAB: SEARCH -->
+            <div class="tab-content" id="searchTab">
+                <input type="text" class="search-input" id="searchInput" placeholder="Nombre o apellido...">
+                <div id="searchResults"></div>
+            </div>
+
+            <!-- TAB: LIST -->
+            <div class="tab-content" id="listTab">
+                <div class="ticket-list" id="ticketList">
+                    <div class="loading">Cargando...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbwR2fuZMsD15YHQJR7aHjnAl-MDyQkrxtLC4IIxssC9hTCUOigGfhIzLa0aLeAKum3y/exec';
+        const PASSWORD = 'wkty';
+
+        let tickets = [];
+        let html5QrCode;
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const password = document.getElementById('passwordInput').value;
+            if (password === PASSWORD) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('app').classList.add('active');
+                initApp();
+            } else {
+                alert('Contraseña incorrecta');
+            }
+        });
+
+        async function initApp() {
+            await loadTickets();
+            initScanner();
+            updateStats();
+        }
+
+        async function loadTickets() {
+            try {
+                const response = await fetch(SHEETS_API_URL + '?action=getAll');
+                const data = await response.json();
+                tickets = data.tickets || [];
+                updateStats();
+                renderTicketList();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function updateStats() {
+            const total = tickets.length;
+            const entradas = tickets.reduce((sum, t) => sum + parseInt(t.cantidad), 0);
+            const ingresados = tickets.filter(t => t.estado === 'usado').length;
+
+            document.getElementById('totalReservas').textContent = total;
+            document.getElementById('totalEntradas').textContent = entradas;
+            document.getElementById('totalIngresados').textContent = ingresados;
+        }
+
+        function initScanner() {
+            html5QrCode = new Html5Qrcode("reader");
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: { width: 250, height: 250 } },
+                onScanSuccess,
+                () => {}
+            ).catch(err => console.error(err));
+        }
+
+        function onScanSuccess(decodedText) {
+            html5QrCode.pause();
+            validateTicket(decodedText);
+        }
+
+        function validateTicket(ticketId) {
+            const resultDiv = document.getElementById('scanResult');
+            const ticket = tickets.find(t => t.id === ticketId);
+
+            if (!ticket) {
+                resultDiv.className = 'result active error';
+                resultDiv.innerHTML = `
+                    <div class="result-header mono">Entrada no encontrada</div>
+                    <div class="result-title display">INVÁLIDO</div>
+                    <div class="result-info">Este código no existe en el sistema</div>
+                    <button class="action-btn secondary" onclick="continueScanning()">Continuar escaneando</button>
+                `;
+                setTimeout(continueScanning, 3000);
+                return;
+            }
+
+            if (ticket.estado === 'usado') {
+                resultDiv.className = 'result active warning';
+                resultDiv.innerHTML = `
+                    <div class="result-header mono">Ya fue usado</div>
+                    <div class="result-title display">YA INGRESÓ</div>
+                    <div class="result-info"><strong>Nombre:</strong> ${ticket.nombre}</div>
+                    <div class="result-info"><strong>Entradas:</strong> ${ticket.cantidad}</div>
+                    <button class="action-btn secondary" onclick="continueScanning()">Continuar escaneando</button>
+                `;
+                setTimeout(continueScanning, 3000);
+                return;
+            }
+
+            resultDiv.className = 'result active success';
+            resultDiv.innerHTML = `
+                <div class="result-header mono">✓ Entrada válida</div>
+                <div class="result-title display">ADMITIDO</div>
+                <div class="result-info"><strong>Nombre:</strong> ${ticket.nombre}</div>
+                <div class="result-info"><strong>Email:</strong> ${ticket.email}</div>
+                <div class="result-info"><strong>Entradas:</strong> ${ticket.cantidad}</div>
+                <button class="action-btn" onclick="markAsUsed('${ticket.id}')">Marcar como usado</button>
+                <button class="action-btn secondary" onclick="continueScanning()">Cancelar</button>
+            `;
+        }
+
+        async function markAsUsed(ticketId) {
+            try {
+                await fetch(SHEETS_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'markAsUsed', id: ticketId })
+                });
+
+                const ticket = tickets.find(t => t.id === ticketId);
+                if (ticket) ticket.estado = 'usado';
+
+                updateStats();
+                renderTicketList();
+                
+                document.getElementById('scanResult').innerHTML = `
+                    <div class="result-header mono">✓ Registrado</div>
+                    <div class="result-title display" style="color: var(--ok);">INGRESO<br>OK</div>
+                    <button class="action-btn" onclick="continueScanning()">Continuar escaneando</button>
+                `;
+            } catch (error) {
+                alert('Error al marcar. Intentá de nuevo.');
+            }
+        }
+
+        function continueScanning() {
+            document.getElementById('scanResult').classList.remove('active');
+            if (html5QrCode) html5QrCode.resume();
+        }
+
+        // Search
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            const resultsDiv = document.getElementById('searchResults');
+
+            if (query.length < 2) {
+                resultsDiv.innerHTML = '';
+                return;
+            }
+
+            const results = tickets.filter(t => 
+                t.nombre.toLowerCase().includes(query)
+            );
+
+            if (results.length === 0) {
+                resultsDiv.innerHTML = '<p class="loading">No se encontraron resultados</p>';
+                return;
+            }
+
+            resultsDiv.innerHTML = results.map(ticket => `
+                <div class="ticket-item ${ticket.estado}">
+                    <div class="ticket-info">
+                        <h4>${ticket.nombre}</h4>
+                        <p>${ticket.cantidad} entrada${ticket.cantidad > 1 ? 's' : ''} · ${ticket.email}</p>
+                    </div>
+                    <span class="badge ${ticket.estado}">${ticket.estado}</span>
+                </div>
+                ${ticket.estado === 'pendiente' ? `<button class="action-btn" onclick="markAsUsed('${ticket.id}')">Marcar como usado</button>` : ''}
+            `).join('');
+        });
+
+        // List
+        function renderTicketList() {
+            const listDiv = document.getElementById('ticketList');
+            
+            if (tickets.length === 0) {
+                listDiv.innerHTML = '<p class="loading">No hay reservas</p>';
+                return;
+            }
+
+            listDiv.innerHTML = tickets
+                .sort((a, b) => a.estado === 'usado' ? 1 : -1)
+                .map(ticket => `
+                    <div class="ticket-item ${ticket.estado}">
+                        <div class="ticket-info">
+                            <h4>${ticket.nombre}</h4>
+                            <p>${ticket.cantidad} entrada${ticket.cantidad > 1 ? 's' : ''} · ${ticket.email}</p>
+                        </div>
+                        <span class="badge ${ticket.estado}">${ticket.estado}</span>
+                    </div>
+                `).join('');
+        }
+
+        // Tabs
+        function switchTab(tabName, event) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+
+            if (tabName !== 'scan' && html5QrCode) {
+                html5QrCode.pause();
+            } else if (tabName === 'scan' && html5QrCode) {
+                html5QrCode.resume();
+            }
+
+            if (tabName === 'list') loadTickets();
+        }
+
+        setInterval(loadTickets, 30000);
+    </script>
+</body>
+</html>
