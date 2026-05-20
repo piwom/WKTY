@@ -267,6 +267,15 @@
             object-fit: cover;
         }
 
+        /* Ocultar mensaje "Scanner paused" */
+        #reader__scan_region > div:first-child {
+            display: none !important;
+        }
+
+        #reader__dashboard_section_csr {
+            display: none !important;
+        }
+
         /* Result card */
         .result {
             background: var(--ash);
@@ -599,7 +608,9 @@
         function updateStats() {
             const total = tickets.length;
             const entradas = tickets.reduce((sum, t) => sum + parseInt(t.cantidad), 0);
-            const ingresados = tickets.filter(t => t.estado === 'usado').length;
+            const ingresados = tickets
+                .filter(t => t.estado === 'usado')
+                .reduce((sum, t) => sum + parseInt(t.cantidad), 0);
 
             document.getElementById('totalReservas').textContent = total;
             document.getElementById('totalEntradas').textContent = entradas;
