@@ -169,8 +169,8 @@
         }
 
         .header-title {
-            font-size: clamp(28px, 6vw, 36px);
-            line-height: 0.86;
+            font-size: clamp(24px, 5vw, 32px);
+            line-height: 1;
             margin-bottom: 6px;
         }
 
@@ -254,20 +254,43 @@
             border: 1.5px solid var(--line-strong);
             overflow: hidden;
             margin-bottom: 16px;
-            max-height: 300px;
+            width: 100%;
+            max-width: 280px;
+            height: 280px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #reader video {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover;
         }
 
         /* Result card */
         .result {
             background: var(--ash);
             border: 1.5px solid var(--line-strong);
-            padding: 16px;
+            padding: 12px;
             margin-bottom: 12px;
             display: none;
         }
 
         .result.active {
-            display: block;
+            display: flex;
+            gap: 12px;
+            align-items: stretch;
+        }
+
+        .result-content {
+            flex: 1;
+        }
+
+        .result-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 100px;
         }
 
         .result.success {
@@ -286,33 +309,68 @@
 
         .result-header {
             font-family: var(--font-mono);
-            font-size: 9px;
+            font-size: 8px;
             letter-spacing: 0.18em;
             text-transform: uppercase;
             opacity: 0.7;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .result-title {
             font-family: var(--font-display);
-            font-size: 40px;
+            font-size: 32px;
             line-height: 0.9;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
         .result-info {
-            margin: 6px 0;
-            font-size: 14px;
+            margin: 4px 0;
+            font-size: 12px;
+            line-height: 1.3;
         }
 
         .result-info strong {
             font-family: var(--font-mono);
-            font-size: 9px;
+            font-size: 8px;
             letter-spacing: 0.14em;
             text-transform: uppercase;
             display: inline-block;
-            width: 80px;
+            width: 65px;
             opacity: 0.7;
+        }
+
+        .btn-mark-used,
+        .btn-cancel {
+            padding: 10px 8px;
+            font-family: var(--font-mono);
+            font-size: 9px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: all 90ms;
+            flex: 1;
+        }
+
+        .btn-mark-used {
+            background: var(--ink);
+            color: var(--paper);
+        }
+
+        .btn-mark-used:hover {
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        .btn-cancel {
+            background: transparent;
+            color: var(--ink);
+            border: 1.5px solid var(--ink);
+        }
+
+        .btn-cancel:hover {
+            background: var(--ink);
+            color: var(--paper);
         }
 
         /* Search */
@@ -570,10 +628,14 @@
             if (!ticket) {
                 resultDiv.className = 'result active error';
                 resultDiv.innerHTML = `
-                    <div class="result-header mono">Entrada no encontrada</div>
-                    <div class="result-title display">INVÁLIDO</div>
-                    <div class="result-info">Este código no existe en el sistema</div>
-                    <button class="action-btn secondary" onclick="continueScanning()">Continuar escaneando</button>
+                    <div class="result-content">
+                        <div class="result-header mono">Entrada no encontrada</div>
+                        <div class="result-title display">INVÁLIDO</div>
+                        <div class="result-info">Este código no existe</div>
+                    </div>
+                    <div class="result-actions">
+                        <button class="btn-cancel" onclick="continueScanning()">OK</button>
+                    </div>
                 `;
                 setTimeout(continueScanning, 3000);
                 return;
@@ -582,11 +644,15 @@
             if (ticket.estado === 'usado') {
                 resultDiv.className = 'result active warning';
                 resultDiv.innerHTML = `
-                    <div class="result-header mono">Ya fue usado</div>
-                    <div class="result-title display">YA INGRESÓ</div>
-                    <div class="result-info"><strong>Nombre:</strong> ${ticket.nombre}</div>
-                    <div class="result-info"><strong>Entradas:</strong> ${ticket.cantidad}</div>
-                    <button class="action-btn secondary" onclick="continueScanning()">Continuar escaneando</button>
+                    <div class="result-content">
+                        <div class="result-header mono">Ya fue usado</div>
+                        <div class="result-title display">YA INGRESÓ</div>
+                        <div class="result-info"><strong>Nombre:</strong> ${ticket.nombre}</div>
+                        <div class="result-info"><strong>Entradas:</strong> ${ticket.cantidad}</div>
+                    </div>
+                    <div class="result-actions">
+                        <button class="btn-cancel" onclick="continueScanning()">OK</button>
+                    </div>
                 `;
                 setTimeout(continueScanning, 3000);
                 return;
@@ -594,13 +660,17 @@
 
             resultDiv.className = 'result active success';
             resultDiv.innerHTML = `
-                <div class="result-header mono">✓ Entrada válida</div>
-                <div class="result-title display">ADMITIDO</div>
-                <div class="result-info"><strong>Nombre:</strong> ${ticket.nombre}</div>
-                <div class="result-info"><strong>Email:</strong> ${ticket.email}</div>
-                <div class="result-info"><strong>Entradas:</strong> ${ticket.cantidad}</div>
-                <button class="action-btn" onclick="markAsUsed('${ticket.id}')">Marcar como usado</button>
-                <button class="action-btn secondary" onclick="continueScanning()">Cancelar</button>
+                <div class="result-content">
+                    <div class="result-header mono">✓ Entrada válida</div>
+                    <div class="result-title display">ADMITIDO</div>
+                    <div class="result-info"><strong>Nombre:</strong> ${ticket.nombre}</div>
+                    <div class="result-info"><strong>Email:</strong> ${ticket.email}</div>
+                    <div class="result-info"><strong>Entradas:</strong> ${ticket.cantidad}</div>
+                </div>
+                <div class="result-actions">
+                    <button class="btn-mark-used" onclick="markAsUsed('${ticket.id}')">MARCAR COMO USADO</button>
+                    <button class="btn-cancel" onclick="continueScanning()">CANCELAR</button>
+                </div>
             `;
         }
 
@@ -620,9 +690,13 @@
                 renderTicketList();
                 
                 document.getElementById('scanResult').innerHTML = `
-                    <div class="result-header mono">✓ Registrado</div>
-                    <div class="result-title display" style="color: var(--ok);">INGRESO<br>OK</div>
-                    <button class="action-btn" onclick="continueScanning()">Continuar escaneando</button>
+                    <div class="result-content">
+                        <div class="result-header mono">✓ Registrado</div>
+                        <div class="result-title display" style="color: var(--ok);">INGRESO OK</div>
+                    </div>
+                    <div class="result-actions">
+                        <button class="btn-mark-used" onclick="continueScanning()">CONTINUAR</button>
+                    </div>
                 `;
             } catch (error) {
                 alert('Error al marcar. Intentá de nuevo.');
