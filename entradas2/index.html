@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAKITOKYS · Reservá tu entrada</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* Design tokens */
+        :root {
+            --ink: #0A0A0A;
+            --paper: #F2EDE3;
+            --paper-dim: #C9C3B6;
+            --line: rgba(242, 237, 227, 0.14);
+            --line-strong: rgba(242, 237, 227, 0.32);
+            --accent: #FF3D2E;
+            --ok: #B6FF3A;
+
+            --font-display: "Anton", "Impact", "Helvetica Neue Condensed", sans-serif;
+            --font-body: "Archivo", "Helvetica Neue", system-ui, sans-serif;
+            --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--ink);
+            color: var(--paper);
+            min-height: 100vh;
+        }
+
+        /* Grain texture */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.07;
+            mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Typography */
+        .display {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: -0.01em;
+            line-height: 0.86;
+            font-weight: 400;
+        }
+
+        .mono {
+            font-family: var(--font-mono);
+            font-feature-settings: "tnum" 1;
+        }
+
+        /* Header */
+        header {
+            padding: 36px 22px 0;
+        }
+
+        .hero-label {
+            font-size: 11px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--paper-dim);
+            margin-bottom: 14px;
+        }
+
+        .hero-title {
+            font-size: clamp(64px, 18vw, 84px);
+            line-height: 0.84;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(28px, 8vw, 42px);
+            line-height: 1;
+            margin-top: 14px;
+            color: var(--accent);
+        }
+
+        /* Event info card */
+        .event-card {
+            margin: 28px 22px 0;
+            border: 1.5px solid var(--paper);
+            padding: 18px;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            column-gap: 18px;
+            row-gap: 14px;
+        }
+
+        .event-label {
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            color: var(--paper-dim);
+        }
+
+        .event-value {
+            font-size: 28px;
+        }
+
+        .event-detail {
+            font-size: 13px;
+            color: var(--paper-dim);
+            margin-top: 4px;
+        }
+
+        /* Form */
+        form {
+            padding: 28px 22px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .section-title {
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--paper-dim);
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .field label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--paper-dim);
+        }
+
+        .field input,
+        .field select {
+            background: transparent;
+            border: none;
+            border-bottom: 1.5px solid var(--line-strong);
+            color: var(--paper);
+            font-family: var(--font-body);
+            font-size: 18px;
+            padding: 10px 0 12px;
+            outline: none;
+            border-radius: 0;
+            -webkit-appearance: none;
+        }
+
+        .field input::placeholder {
+            color: rgba(242, 237, 227, 0.35);
+        }
+
+        .field input:focus {
+            border-bottom-color: var(--accent);
+        }
+
+        /* Quantity selector */
+        .qty-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--paper-dim);
+            margin-bottom: 10px;
+        }
+
+        .qty-selector {
+            display: flex;
+            align-items: center;
+            border: 1.5px solid var(--line-strong);
+        }
+
+        .qty-btn {
+            background: transparent;
+            color: var(--paper);
+            border: none;
+            padding: 16px 22px;
+            font-family: var(--font-display);
+            font-size: 28px;
+            cursor: pointer;
+            transition: background 90ms;
+        }
+
+        .qty-btn:hover {
+            background: var(--line);
+        }
+
+        .qty-btn:first-child {
+            border-right: 1.5px solid var(--line-strong);
+        }
+
+        .qty-btn:last-child {
+            border-left: 1.5px solid var(--line-strong);
+        }
+
+        .qty-display {
+            flex: 1;
+            text-align: center;
+            font-family: var(--font-display);
+            font-size: 32px;
+        }
+
+        .qty-note {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--paper-dim);
+            margin-top: 8px;
+            letter-spacing: 0.1em;
+        }
+
+        /* Button */
+        .btn-hard {
+            display: block;
+            width: 100%;
+            background: var(--paper);
+            color: var(--ink);
+            border: none;
+            padding: 22px;
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            font-size: 28px;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: transform 90ms ease, background 90ms ease;
+        }
+
+        .btn-hard:hover {
+            background: var(--accent);
+        }
+
+        .btn-hard:active {
+            transform: translate(1px, 1px);
+        }
+
+        .btn-hard:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .form-note {
+            font-size: 11px;
+            color: var(--paper-dim);
+            line-height: 1.5;
+        }
+
+        /* Marquee */
+        .marquee-container {
+            overflow: hidden;
+            background: var(--paper);
+            color: var(--ink);
+            border-top: 1.5px solid var(--ink);
+            border-bottom: 1.5px solid var(--ink);
+            padding: 8px 0;
+            font-family: var(--font-display);
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-top: 32px;
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        .marquee-track {
+            display: inline-flex;
+            gap: 24px;
+            white-space: nowrap;
+            animation: marquee 28s linear infinite;
+        }
+
+        /* Success screen */
+        .success-screen {
+            padding: 24px 22px 32px;
+        }
+
+        .success-label {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-top: 16px;
+        }
+
+        .success-title {
+            font-size: 60px;
+            line-height: 1.1;
+            margin-top: 10px;
+        }
+
+        /* Ticket card */
+        .ticket-card {
+            margin-top: 28px;
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        .ticket-header {
+            padding: 18px 18px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .ticket-title-small {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            color: rgba(10, 10, 10, 0.5);
+        }
+
+        .ticket-title-main {
+            font-size: 28px;
+            line-height: 1;
+            margin-top: 4px;
+        }
+
+        .ticket-subtitle {
+            font-size: 11px;
+            margin-top: 2px;
+        }
+
+        .ticket-id {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.06em;
+        }
+
+        .ticket-details {
+            padding: 0 18px 14px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 11px;
+        }
+
+        .ticket-detail-label {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            opacity: 0.6;
+            letter-spacing: 0.14em;
+        }
+
+        /* Ticket divider */
+        .dash {
+            border-top: 1.5px dashed var(--line-strong);
+            height: 1px;
+            position: relative;
+            margin: 0 12px;
+        }
+
+        .dash::before,
+        .dash::after {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--ink);
+            top: -10px;
+        }
+
+        .dash::before {
+            left: -22px;
+        }
+
+        .dash::after {
+            right: -22px;
+        }
+
+        .ticket-qr-section {
+            display: flex;
+            padding: 8px 18px 18px;
+            gap: 14px;
+            align-items: center;
+        }
+
+        #qrcode {
+            flex-shrink: 0;
+        }
+
+        #qrcode canvas,
+        #qrcode img {
+            display: block;
+        }
+
+        .ticket-code-info {
+            flex: 1;
+        }
+
+        .code-label {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            letter-spacing: 0.18em;
+            opacity: 0.6;
+        }
+
+        .code-value {
+            font-family: var(--font-mono);
+            font-size: 16px;
+            margin-top: 4px;
+            word-break: break-all;
+        }
+
+        .code-note {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            opacity: 0.5;
+            margin-top: 10px;
+            line-height: 1.5;
+            letter-spacing: 0.06em;
+        }
+
+        /* Address callout */
+        .address-card {
+            margin-top: 22px;
+            border: 1.5px solid var(--paper);
+            padding: 16px;
+        }
+
+        .address-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            color: var(--paper-dim);
+            text-transform: uppercase;
+        }
+
+        .address-street {
+            font-size: 22px;
+            margin-top: 6px;
+        }
+
+        .address-detail {
+            font-size: 13px;
+            color: var(--paper-dim);
+            margin-top: 2px;
+        }
+
+        .address-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--accent);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            text-decoration: underline;
+        }
+
+        /* Back button */
+        .btn-back {
+            margin-top: 22px;
+            width: 100%;
+            background: transparent;
+            color: var(--paper-dim);
+            border: 1.5px solid var(--line-strong);
+            padding: 14px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        /* Loading/Error */
+        .loading,
+        .error {
+            text-align: center;
+            padding: 20px 22px;
+            display: none;
+        }
+
+        .loading.active,
+        .error.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid var(--line);
+            border-top: 3px solid var(--paper);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: var(--accent);
+            color: var(--paper);
+            padding: 12px 16px;
+            border-radius: 0;
+            margin: 20px 22px;
+            font-size: 14px;
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error" id="error"></div>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p class="mono">Generando tu entrada...</p>
+        </div>
+
+        <!-- FORM DE REGISTRO -->
+        <div id="formView">
+            <header>
+                <div class="mono hero-label">Reservá tu lugar /</div>
+                <img src="wkty-blanco.png" alt="WAKITOKYS" style="height: clamp(80px, 20vw, 120px); display: block; margin: 0;">
+                <div class="display hero-subtitle">presenta · WAKITOKYS Y EKATOMBE</div>
+            </header>
+
+            <div class="event-card">
+                <div class="mono event-label">FECHA</div>
+                <div class="display event-value">SAB 22·08 / 21H</div>
+
+                <div class="mono event-label">LUGAR</div>
+                <div>
+                    <div class="display" style="font-size: 22px;">LAQUINCE</div>
+                    <div class="event-detail">Corrientes 5426 · Villa Crespo · CABA</div>
+                </div>
+
+                <div class="mono event-label">ENTRADA</div>
+                <div class="display event-value" style="color: var(--accent);">GRATIS / CUPO LIMITADO</div>
+            </div>
+
+            <form id="ticketForm">
+                <div class="mono section-title">─── Tus datos ───</div>
+
+                <div class="field">
+                    <label>Nombre y apellido</label>
+                    <input type="text" id="nombre" required placeholder="Lucía Fernández" autocomplete="name">
+                </div>
+
+                <div class="field">
+                    <label>Email</label>
+                    <input type="email" id="email" required placeholder="vos@correo.com" autocomplete="email">
+                </div>
+
+                <div>
+                    <div class="qty-label">Cantidad de entradas</div>
+                    <div class="qty-selector">
+                        <button type="button" class="qty-btn" id="qtyMinus">−</button>
+                        <div class="qty-display" id="qtyDisplay">01</div>
+                        <button type="button" class="qty-btn" id="qtyPlus">+</button>
+                    </div>
+                    <div class="qty-note">Máx · 4 por persona</div>
+                </div>
+
+                <button type="submit" class="btn-hard display" id="submitBtn">
+                    Reservar mi lugar ↦
+                </button>
+
+                <div class="form-note">
+                    Vas a poder descargar el QR al instante.
+                    Guardalo en el celu y presentalo en la puerta el día del show.
+                </div>
+            </form>
+
+            <div class="marquee-container">
+                <div class="marquee-track">
+                    <span>★ WAKITOKYS Y EKATOMBE · SAB 22·08 · 21H · LAQUINCE · CORRIENTES 5426 · VILLA CRESPO · CABA · GRATIS · </span>
+                    <span>★ WAKITOKYS Y EKATOMBE · SAB 22·08 · 21H · LAQUINCE · CORRIENTES 5426 · VILLA CRESPO · CABA · GRATIS · </span>
+                </div>
+            </div>
+            <div style="height: 24px;"></div>
+        </div>
+
+        <!-- SUCCESS VIEW CON TICKET -->
+        <div id="successView" class="hidden">
+            <div class="success-screen">
+                <div class="mono success-label">✓ Reserva confirmada</div>
+                <h2 class="display success-title">
+                    NOS<br>VEMOS<br>AHÍ.
+                </h2>
+
+                <div style="background: var(--ash); border: 1.5px solid var(--line-strong); padding: 16px; margin: 24px 0;">
+                    <p style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px;">📧 Te enviamos un email</p>
+                    <p style="font-size: 14px; line-height: 1.6; margin-bottom: 8px;">
+                        Revisá tu casilla de correo. Si no lo ves, <strong>chequeá SPAM</strong>.
+                    </p>
+                    <p style="font-size: 13px; color: var(--paper-dim); line-height: 1.5;">
+                        También podés descargar el ticket acá abajo.
+                    </p>
+                </div>
+
+                <!-- Ticket card -->
+                <div class="ticket-card">
+                    <div class="ticket-header">
+                        <div>
+                            <div class="ticket-title-small">ADMIT ONE</div>
+                            <svg width="140" height="22" viewBox="0 0 800 120" style="display: block; margin-top: 6px;">
+                                <text x="0" y="100" font-family="Anton, Impact, sans-serif" font-size="120" fill="#0A0A0A" letter-spacing="-2">WAKITOKYS</text>
+                            </svg>
+                            <div class="ticket-subtitle">WAKITOKYS Y EKATOMBE · presentación</div>
+                        </div>
+                        <div class="ticket-id mono" id="ticketNumber">#0000</div>
+                    </div>
+
+                    <div class="ticket-details">
+                        <div>
+                            <div class="ticket-detail-label">FECHA</div>
+                            SAB 22·08 · 21H
+                        </div>
+                        <div>
+                            <div class="ticket-detail-label">LUGAR</div>
+                            LAQUINCE
+                        </div>
+                        <div>
+                            <div class="ticket-detail-label">A NOMBRE DE</div>
+                            <span id="ticketName">---</span>
+                        </div>
+                        <div>
+                            <div class="ticket-detail-label">ENTRADAS</div>
+                            <span id="ticketQty">×1</span>
+                        </div>
+                    </div>
+
+                    <div style="position: relative; height: 16px;">
+                        <div class="dash" style="position: absolute; top: 7px;"></div>
+                    </div>
+
+                    <div class="ticket-qr-section">
+                        <div id="qrcode"></div>
+                        <div class="ticket-code-info">
+                            <div class="code-label">CÓDIGO</div>
+                            <div class="code-value mono" id="ticketCode">WKTY-0000</div>
+                            <div class="code-note">
+                                Presentá en la puerta.<br>Una sola lectura por código.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón descargar ticket completo -->
+                <button class="btn-hard display" id="downloadBtn" style="margin-top: 22px;">
+                    Descargar ticket ↓
+                </button>
+
+                <!-- Address -->
+                <div class="address-card">
+                    <div class="address-label">Cómo llegar</div>
+                    <div class="display address-street">CORRIENTES 5426</div>
+                    <div class="address-detail">Villa Crespo · CABA</div>
+                    <a href="https://maps.google.com/?q=Corrientes+5426,+Villa+Crespo,+Buenos+Aires" target="_blank" class="address-link">
+                        Abrir en mapa ↗
+                    </a>
+                </div>
+
+                <button class="btn-back mono" id="backBtn">← Reservar otra</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // REEMPLAZÁ ESTA URL CON LA DE TU NUEVO GOOGLE APPS SCRIPT
+        const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbwzLgHHsRWSurTfZLfprXrs9lsJ9BEbav3As4zj4Vp71PEMEGPxlUII9dXgeBnTb4kgig/exec';
+
+        const formView = document.getElementById('formView');
+        const successView = document.getElementById('successView');
+        const form = document.getElementById('ticketForm');
+        const errorDiv = document.getElementById('error');
+        const loadingDiv = document.getElementById('loading');
+
+        let quantity = 1;
+
+        // Quantity controls
+        document.getElementById('qtyMinus').addEventListener('click', () => {
+            if (quantity > 1) {
+                quantity--;
+                document.getElementById('qtyDisplay').textContent = String(quantity).padStart(2, '0');
+            }
+        });
+
+        document.getElementById('qtyPlus').addEventListener('click', () => {
+            if (quantity < 4) {
+                quantity++;
+                document.getElementById('qtyDisplay').textContent = String(quantity).padStart(2, '0');
+            }
+        });
+
+        // Generar ID único
+        function generateId() {
+            return 'WKT-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        }
+
+        // Mostrar error
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.classList.add('active');
+            setTimeout(() => errorDiv.classList.remove('active'), 5000);
+        }
+
+        // Enviar datos a Google Sheets
+        async function saveToSheets(data) {
+            try {
+                const response = await fetch(SHEETS_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                return true;
+            } catch (error) {
+                console.error('Error guardando en Sheets:', error);
+                throw error;
+            }
+        }
+
+        // Submit form
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const nombre = document.getElementById('nombre').value.trim();
+            const email = document.getElementById('email').value.trim();
+
+            if (!nombre || !email) {
+                showError('Por favor completá todos los campos');
+                return;
+            }
+
+            const ticketId = generateId();
+
+            // Mostrar loading
+            formView.style.display = 'none';
+            loadingDiv.classList.add('active');
+
+            try {
+                // Guardar en Sheets
+                const ticketData = {
+                    id: ticketId,
+                    nombre: nombre,
+                    email: email,
+                    cantidad: quantity,
+                    estado: 'pendiente',
+                    timestamp: new Date().toISOString()
+                };
+
+                await saveToSheets(ticketData);
+
+                // Generar QR
+                document.getElementById('qrcode').innerHTML = '';
+                new QRCode(document.getElementById('qrcode'), {
+                    text: ticketId,
+                    width: 160,
+                    height: 160,
+                    colorDark: '#0A0A0A',
+                    colorLight: '#F2EDE3',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
+                // Mostrar info del ticket
+                const shortId = ticketId.split('-')[1].substr(0, 4);
+                document.getElementById('ticketNumber').textContent = `#${shortId}`;
+                document.getElementById('ticketName').textContent = nombre.toUpperCase();
+                document.getElementById('ticketQty').textContent = `×${quantity}`;
+                document.getElementById('ticketCode').innerHTML = `WKTY<br>${shortId}`;
+
+                // Mostrar success view
+                loadingDiv.classList.remove('active');
+                successView.classList.remove('hidden');
+
+                // Scroll to top
+                window.scrollTo(0, 0);
+
+            } catch (error) {
+                loadingDiv.classList.remove('active');
+                formView.style.display = 'block';
+                showError('Error al generar la entrada. Intentá de nuevo.');
+                console.error(error);
+            }
+        });
+
+        // Back button con confirmación
+        document.getElementById('backBtn').addEventListener('click', () => {
+            const confirmar = confirm('¿Ya descargaste tu ticket o revisaste tu email?\n\n(Si no lo encontrás, chequeá SPAM)\n\nSi no lo tenés, en la entrada decinos tu nombre y apellido.');
+
+            if (confirmar) {
+                successView.classList.add('hidden');
+                formView.style.display = 'block';
+                form.reset();
+                quantity = 1;
+                document.getElementById('qtyDisplay').textContent = '01';
+                window.scrollTo(0, 0);
+            }
+        });
+
+        // Download ticket button
+        document.getElementById('downloadBtn').addEventListener('click', async () => {
+            const ticketCard = document.querySelector('.ticket-card');
+            const ticketId = document.getElementById('ticketCode').textContent.replace(/<br>/g, '');
+
+            try {
+                const canvas = await html2canvas(ticketCard, {
+                    backgroundColor: '#F2EDE3',
+                    scale: 2,
+                    logging: false
+                });
+
+                const link = document.createElement('a');
+                link.download = `wakitokys-ticket-${ticketId}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } catch (error) {
+                console.error('Error al generar imagen:', error);
+                alert('Error al descargar el ticket. Intentá de nuevo.');
+            }
+        });
+    </script>
+</body>
+</html>
