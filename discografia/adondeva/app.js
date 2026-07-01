@@ -4,14 +4,14 @@
    ═══════════════════════════════════════════════════ */
 
 const TRACKS = [
-  { num: '01', name: 'Música',      src: 'assets/audio/musica.mp3',      dur: '3:42', mood: 'Cósmica · Pop rock' },
-  { num: '02', name: 'China',       src: 'assets/audio/china.mp3',       dur: '4:10', mood: 'Patagónica · Indie folk' },
-  { num: '03', name: 'Noganoma',    src: 'assets/audio/noganoma.mp3',    dur: '5:08', mood: 'Hip hop · Funk · Crítica' },
-  { num: '04', name: 'Trance',      src: 'assets/audio/trance.mp3',      dur: '3:55', mood: 'Hipnótica · Rap' },
-  { num: '05', name: 'El Día',      src: 'assets/audio/el-dia.mp3',      dur: '3:30', mood: 'Tormenta · Pop' },
-  { num: '06', name: 'Insomnio',    src: 'assets/audio/insomnio.mp3',    dur: '4:22', mood: 'Nocturna · Rap' },
-  { num: '07', name: 'Cayendo',     src: 'assets/audio/cayendo.mp3',     dur: '4:15', mood: 'Reflexiva · Soul' },
-  { num: '08', name: 'Hipnotizadx', src: 'assets/audio/hipnotizadx.mp3', dur: '3:18', mood: 'Picante · Funk' },
+  { num: '01', name: 'Música',      src: '../../assets/audio/musica.mp3',      dur: '3:42', mood: 'Cósmica · Pop rock' },
+  { num: '02', name: 'China',       src: '../../assets/audio/china.mp3',       dur: '4:10', mood: 'Patagónica · Indie folk' },
+  { num: '03', name: 'Noganoma',    src: '../../assets/audio/noganoma.mp3',    dur: '5:08', mood: 'Hip hop · Funk · Crítica' },
+  { num: '04', name: 'Trance',      src: '../../assets/audio/trance.mp3',      dur: '3:55', mood: 'Hipnótica · Rap' },
+  { num: '05', name: 'El Día',      src: '../../assets/audio/el-dia.mp3',      dur: '3:30', mood: 'Tormenta · Pop' },
+  { num: '06', name: 'Insomnio',    src: '../../assets/audio/insomnio.mp3',    dur: '4:22', mood: 'Nocturna · Rap' },
+  { num: '07', name: 'Cayendo',     src: '../../assets/audio/cayendo.mp3',     dur: '4:15', mood: 'Reflexiva · Soul' },
+  { num: '08', name: 'Hipnotizadx', src: '../../assets/audio/hipnotizadx.mp3', dur: '3:18', mood: 'Picante · Funk' },
 ];
 
 const CREDITOS = [
@@ -172,7 +172,7 @@ function load(i) {
   aud.currentTime = 0; aud.volume = 1;
   document.getElementById('pb-name').textContent = TRACKS[i].name;
   document.getElementById('pb-meta').innerHTML = `<span class="live-dot"></span> ${TRACKS[i].mood}`;
-  document.getElementById('pb-cover').style.backgroundImage = "url('assets/img/cover.jpg')";
+  document.getElementById('pb-cover').style.backgroundImage = "url('../../assets/img/cover.jpg')";
   bar.classList.add('on');
   /* scroll active card into center on programmatic load */
   const c = trackCards[i];

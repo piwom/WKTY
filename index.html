@@ -1,192 +1,371 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#000000" />
-  <meta name="color-scheme" content="only light" />
-  <title>Wakitokys — ¿A dónde va?</title>
-  <meta name="description" content="Unboxing digital del segundo disco de Wakitokys. Buenos Aires, 2026." />
-  <meta property="og:title" content="Wakitokys — ¿A dónde va?" />
-  <meta property="og:description" content="¿A dónde va? · Wakitokys · Buenos Aires, 2026." />
-  <meta property="og:image" content="assets/img/cover.jpg" />
-  <meta property="og:type" content="music.album" />
-
-  <link rel="icon" type="image/png" href="assets/img/logo.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Barlow+Condensed:wght@300;400;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wakitokys</title>
+<meta name="description" content="Wakitokys — Banda de Buenos Aires. Indie / Pop rock. Escuchá ¿A dónde va?, nuestro segundo disco.">
+<meta property="og:title" content="Wakitokys">
+<meta property="og:description" content="¿A dónde va? — segundo disco. Buenos Aires, 2026.">
+<meta property="og:image" content="/assets/img/cover.jpg">
+<link rel="icon" type="image/png" href="/assets/img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Barlow+Condensed:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+  body{background:#000;color:#fff;font-family:'DM Mono',ui-monospace,monospace;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  img{max-width:100%;display:block}
+  .page{position:relative}
+  .page::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:500;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");opacity:.05;mix-blend-mode:overlay}
+  @keyframes pulse{0%,100%{opacity:.3;transform:scale(.82)}50%{opacity:1;transform:scale(1.12)}}
+  @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @keyframes bounceDown{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+  .burger{display:none}
+  .mobile-menu{display:none}
+  @media(max-width:720px){
+    .nav-links{display:none!important}
+    .burger{display:flex!important}
+    .hide-m{display:none!important}
+  }
+</style>
 </head>
 <body>
+<div class="page">
 
-    </div>
-    <p class="intro-fecha">13 · Mayo · 2026</p>
+  <!-- NAV -->
+  <header style="position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px clamp(18px,4vw,40px);background:rgba(0,0,0,.82);backdrop-filter:blur(10px);border-bottom:1px solid #1f1f1f">
+    <a href="/" style="font-family:'Bebas Neue';font-size:22px;letter-spacing:.05em;line-height:1;border:1px solid #333;padding:5px 9px 3px">WKTY</a>
+    <nav class="nav-links" style="display:flex;gap:24px;font:400 11px 'DM Mono';letter-spacing:.14em;text-transform:uppercase">
+      <a href="/" style="color:#fff" aria-current="page">Inicio</a>
+      <a href="/bio.html" style="color:#999;transition:color .2s">Bio</a>
+      <a href="/discografia/" style="color:#999;transition:color .2s">Discos</a>
+      <a href="/fotos.html" style="color:#999;transition:color .2s">Fotos</a>
+      <a href="/videos.html" style="color:#999;transition:color .2s">Videos</a>
+      <a href="/tour.html" style="color:#999;transition:color .2s">Tour</a>
+      <a href="/merch.html" style="color:#999;transition:color .2s">Merch</a>
+    </nav>
+    <button class="burger" aria-label="Menú" style="flex-direction:column;gap:5px;padding:4px">
+      <i style="display:block;width:24px;height:2px;background:#fff"></i>
+      <i style="display:block;width:24px;height:2px;background:#fff"></i>
+      <i style="display:block;width:24px;height:2px;background:#fff"></i>
+    </button>
+  </header>
+
+  <div class="mobile-menu" style="position:fixed;inset:56px 0 0;z-index:190;background:#000;flex-direction:column;padding:8px clamp(18px,4vw,40px) 40px">
+    <a href="/" data-mclose style="font-family:'Bebas Neue';font-size:34px;padding:16px 0;border-bottom:1px solid #1f1f1f">Inicio</a>
+    <a href="/bio.html" data-mclose style="font-family:'Bebas Neue';font-size:34px;padding:16px 0;border-bottom:1px solid #1f1f1f">Bio</a>
+    <a href="/discografia/" data-mclose style="font-family:'Bebas Neue';font-size:34px;padding:16px 0;border-bottom:1px solid #1f1f1f">Discografía</a>
+    <a href="/fotos.html" data-mclose style="font-family:'Bebas Neue';font-size:34px;padding:16px 0;border-bottom:1px solid #1f1f1f">Fotos</a>
+    <a href="/videos.html" data-mclose style="font-family:'Bebas Neue';font-size:34px;padding:16px 0;border-bottom:1px solid #1f1f1f">Videos</a>
+    <a href="/tour.html" data-mclose style="font-family:'Bebas Neue';font-size:34px;padding:16px 0;border-bottom:1px solid #1f1f1f">Tour</a>
+    <a href="/merch.html" data-mclose style="font-family:'Bebas Neue';font-size:34px;padding:16px 0;border-bottom:1px solid #1f1f1f">Merch</a>
   </div>
-</div>
-
-<!-- ═══ MAIN ═══ -->
-<div id="main" class="on">
 
   <!-- HERO -->
-  <section id="hero">
-    <div class="hero-meta-row">
-      <span>BSAS · 2026</span>
+  <section style="position:relative;min-height:86vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:clamp(18px,3vw,30px);padding:clamp(40px,7vw,80px) clamp(18px,4vw,40px) clamp(30px,5vw,56px);overflow:hidden">
+    <div style="font:400 clamp(9px,1.4vw,12px) 'DM Mono';letter-spacing:.34em;color:#999;text-transform:uppercase;display:flex;align-items:center;gap:10px">
+      <span style="width:6px;height:6px;border-radius:50%;background:#ff3838;animation:pulse 1.4s ease-in-out infinite"></span>Buenos Aires · Indie / Pop rock
     </div>
-    <div class="hero-top">
-      <img src="assets/img/logo.png" alt="Wakitokys" class="hero-wkty" data-egg-trigger />
-      <div class="hero-adondeva">¿A dónde va?</div>
+    <h1 style="font-family:'Bebas Neue';font-size:clamp(64px,18vw,280px);line-height:.82;letter-spacing:.01em;text-transform:uppercase">Wakitokys</h1>
+    <canvas class="wave-hero" width="1100" height="100" style="width:min(92vw,720px);height:clamp(54px,8vw,90px);display:block;opacity:.9"></canvas>
+    <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;align-items:center;margin-top:4px">
+      <button class="hero-play" style="display:flex;align-items:center;gap:12px;border:1px solid #fff;border-radius:40px;padding:14px 28px;font:400 clamp(10px,1.5vw,12px) 'DM Mono';letter-spacing:.24em;text-transform:uppercase">
+        <span class="hp-ic">▶</span> Reproducir disco
+      </button>
+      <a href="/discografia/" style="display:flex;align-items:center;gap:8px;font:400 clamp(10px,1.5vw,12px) 'DM Mono';letter-spacing:.24em;text-transform:uppercase;color:#999">¿A dónde va? — 2026 ↓</a>
     </div>
-    <div class="hero-cover-wrap">
-      <img src="assets/img/cover.jpg" alt="Tapa del disco ¿A dónde va?" class="hero-cover" />
-    </div>
-    
-    <div class="scroll-hint">SCROLL <span class="dot"></span></div>
+    <div style="position:absolute;left:clamp(18px,4vw,40px);bottom:20px;display:flex;align-items:center;gap:10px;font:400 9px 'DM Mono';letter-spacing:.3em;color:#555;text-transform:uppercase" class="hide-m">scroll<span style="width:4px;height:4px;border-radius:50%;background:#fff;animation:bounceDown 1.6s ease-in-out infinite"></span></div>
+    <div style="position:absolute;right:clamp(18px,4vw,40px);bottom:20px;font:400 9px 'DM Mono';letter-spacing:.3em;color:#555;text-transform:uppercase" class="hide-m">BSAS · 2026</div>
   </section>
 
-  <!-- RESEÑA -->
-  <section id="resena">
-    <div class="section-label reveal">EL DISCO</div>
-    <div class="resena-body reveal">
-      ¿A dónde va?, un trabajo gestado a lo largo de un año y medio que marca el cierre de una etapa y el inicio de otra.
-      <span class="br"></span>
-      Atravesado por el contexto de la pandemia, el proceso de composición estuvo profundamente ligado a lo personal: las ansiedades, las pérdidas y la necesidad de encontrar pequeños refugios en medio de un escenario incierto. Las canciones funcionan como registros de ese tránsito, donde lo íntimo y lo colectivo se cruzan de manera constante.
-      <span class="br"></span>
-      El disco se construye a partir de materiales que, de distintas formas, dejan atrás un momento anterior de la banda, y consolidan una búsqueda más directa y honesta. En ese recorrido, aparecen climas que oscilan entre la introspección y cierta tensión latente.
-      <span class="br"></span>
-      «¿A dónde va?» plantea una pregunta abierta. Una incertidumbre ambigua que, sin volverse explícita, deja entrever la sensación de estar avanzando hacia un mundo algo más hostil. Lejos de ofrecer respuestas, el disco propone habitar esa incomodidad y encontrar, dentro de ella, pequeños espacios de alivio.
+  <!-- MARQUEE -->
+  <div style="border-top:1px solid #1f1f1f;border-bottom:1px solid #1f1f1f;overflow:hidden;padding:13px 0">
+    <div style="display:inline-flex;gap:32px;white-space:nowrap;font:300 clamp(12px,1.6vw,15px) 'Barlow Condensed';letter-spacing:.34em;text-transform:uppercase;color:#888;animation:marquee 24s linear infinite">
+      <span>◇ ¿A dónde va? ◇ Segundo disco ◇ 2026 ◇ Buenos Aires ◇ Indie ◇ Pop rock ◇ ¿A dónde va? ◇ Segundo disco ◇ 2026 ◇ Buenos Aires ◇ Indie ◇ Pop rock&nbsp;</span>
     </div>
-    <div class="resena-pull reveal">¿A DÓNDE VA?</div>
+  </div>
+
+  <!-- BIO TEASER -->
+  <section style="padding:clamp(56px,9vw,100px) clamp(18px,4vw,40px);border-bottom:1px solid #1f1f1f">
+    <div data-rv style="opacity:0;transform:translateY(18px);transition:opacity .8s,transform .8s;display:flex;align-items:center;gap:12px;font:400 10px 'DM Mono';letter-spacing:.4em;color:#999;text-transform:uppercase;margin-bottom:30px"><span style="width:22px;height:1px;background:#555"></span>La banda</div>
+    <p data-rv style="opacity:0;transform:translateY(18px);transition:opacity .8s .05s,transform .8s .05s;font:300 clamp(24px,4.6vw,40px)/1.32 'Barlow Condensed';max-width:24ch;letter-spacing:.005em">Wakitokys cruza indie, pop rock y climas más oscuros para hablar de lo íntimo y lo colectivo.</p>
+    <a href="/bio.html" data-rv style="opacity:0;transform:translateY(18px);transition:opacity .8s .1s,transform .8s .1s;display:inline-flex;margin-top:30px;border:1px solid #fff;padding:13px 26px;font:400 10px 'DM Mono';letter-spacing:.26em;text-transform:uppercase">Leer bio completa →</a>
   </section>
 
-  <!-- TRACKLIST CAROUSEL -->
-  <section id="tracklist">
-    <div class="section-header-x reveal">
-      <h2>Track<br/>list</h2>
-      <div class="meta">DESLIZÁ →</div>
+  <!-- ÚLTIMO LANZAMIENTO + TRACKLIST -->
+  <section style="border-bottom:1px solid #1f1f1f;padding:clamp(48px,8vw,90px) 0 0">
+    <div style="padding:0 clamp(18px,4vw,40px) 26px;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div style="display:flex;align-items:center;gap:12px;font:400 10px 'DM Mono';letter-spacing:.4em;color:#999;text-transform:uppercase"><span style="width:22px;height:1px;background:#555"></span>Último lanzamiento</div>
+      <a href="/discografia/adondeva/" style="font:400 10px 'DM Mono';letter-spacing:.24em;color:#777;text-transform:uppercase">Entrar al unboxing →</a>
     </div>
-    <div class="carousel">
-      <div class="carousel-track" id="carousel-track"></div>
-      <div class="carousel-dots" id="carousel-dots"></div>
-      <div class="carousel-counter" id="carousel-counter"></div>
-    </div>
-  </section>
-
-  <!-- BAND PHOTO -->
-  <section id="foto-banda">
-    <div class="foto-wrap">
-      <img src="assets/img/banda.jpg" alt="Wakitokys, foto de la banda" class="foto-img" />
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0;border-top:1px solid #1f1f1f">
+      <div style="padding:clamp(24px,4vw,44px);border-right:1px solid #1f1f1f;display:flex;flex-direction:column;gap:18px;justify-content:center">
+        <img src="/assets/img/cover.jpg" alt="Tapa ¿A dónde va?" data-rv style="opacity:0;transform:translateY(18px);transition:opacity .8s,transform .8s;aspect-ratio:1;object-fit:cover;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.5)">
+        <div>
+          <div style="font-family:'Bebas Neue';font-size:clamp(40px,7vw,68px);line-height:.9">¿A dónde va?</div>
+          <div style="font:400 10px 'DM Mono';letter-spacing:.24em;color:#777;text-transform:uppercase;margin-top:6px">2026 · LP · 8 temas</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;justify-content:center">
+        <div class="tlist"></div>
       </div>
     </div>
   </section>
 
-  <!-- CRÉDITOS -->
-  <section id="creditos">
-    <h2 class="reveal">Créditos</h2>
-    <div class="creditos-meta reveal">
-      <span>11 PERSONAS</span>
-      <span>TAP PARA IG</span>
+  <!-- DISCOGRAFÍA RÁPIDA -->
+  <section style="padding:clamp(48px,8vw,90px) clamp(18px,4vw,40px);border-bottom:1px solid #1f1f1f">
+    <h2 data-rv style="opacity:0;transform:translateY(18px);transition:opacity .8s,transform .8s;font-family:'Bebas Neue';font-size:clamp(40px,11vw,90px);line-height:.9;margin-bottom:30px">Discografía</h2>
+    <div class="dgrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px"></div>
+    <div style="margin-top:24px"><a href="/discografia/" style="border:1px solid #555;padding:12px 22px;font:400 10px 'DM Mono';letter-spacing:.24em;text-transform:uppercase;color:#999">Ver todo →</a></div>
+  </section>
+
+  <!-- FOTOS -->
+  <section style="padding:clamp(48px,8vw,90px) clamp(18px,4vw,40px);border-bottom:1px solid #1f1f1f">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:30px">
+      <h2 style="font-family:'Bebas Neue';font-size:clamp(40px,11vw,90px);line-height:.9">Fotos</h2>
+      <a href="/fotos.html" style="font:400 10px 'DM Mono';letter-spacing:.24em;color:#777;text-transform:uppercase">Ver todas ↗</a>
     </div>
-    <div class="creditos-grid reveal-stagger" id="creditos-wrap"></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
+      <img src="/assets/img/banda.jpg" alt="Wakitokys" style="width:100%;aspect-ratio:3/4;object-fit:cover;filter:grayscale(100%);transition:filter .3s" onmouseenter="this.style.filter='grayscale(0%)'" onmouseleave="this.style.filter='grayscale(100%)'">
+      <img src="/assets/img/cover.jpg" alt="Tapa ¿A dónde va?" style="width:100%;aspect-ratio:3/4;object-fit:cover;filter:grayscale(100%);transition:filter .3s" onmouseenter="this.style.filter='grayscale(0%)'" onmouseleave="this.style.filter='grayscale(100%)'">
+    </div>
   </section>
 
   <!-- REDES -->
-  <section id="redes">
-    <h2 class="reveal">Encontranos</h2>
-    <div class="redes-grid reveal-stagger">
-      <a class="red-row" href="https://open.spotify.com/intl-es/artist/4oZxVaG812abuExHgD0AAI" target="_blank" rel="noopener">
-        <div class="red-icon"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="white" d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></div>
-        <span class="red-label">Spotify</span>
-        <span class="red-handle">/wakitokys</span>
-        <span class="red-arrow">↗</span>
-      </a>
-      <a class="red-row" href="https://www.instagram.com/wakitokys/" target="_blank" rel="noopener">
-        <div class="red-icon"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="white" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div>
-        <span class="red-label">Instagram</span>
-        <span class="red-handle">@wakitokys</span>
-        <span class="red-arrow">↗</span>
-      </a>
-      <a class="red-row" href="https://www.youtube.com/channel/UCfaWr4pTy1TWFscegIzSfQg" target="_blank" rel="noopener">
-        <div class="red-icon"><svg width="20" height="14" viewBox="0 0 24 17"><path fill="white" d="M23.498 2.648a3.01 3.01 0 0 0-2.117-2.132C19.505 0 12 0 12 0S4.495 0 2.619.516A3.01 3.01 0 0 0 .502 2.648 31.578 31.578 0 0 0 0 8.5a31.578 31.578 0 0 0 .502 5.852 3.01 3.01 0 0 0 2.117 2.132C4.495 17 12 17 12 17s7.505 0 9.381-.516a3.01 3.01 0 0 0 2.117-2.132A31.578 31.578 0 0 0 24 8.5a31.578 31.578 0 0 0-.502-5.852zM9.545 12.068V4.932L15.818 8.5l-6.273 3.568z"/></svg></div>
-        <span class="red-label">YouTube</span>
-        <span class="red-handle">/wakitokys</span>
-        <span class="red-arrow">↗</span>
-      </a>
-      <a class="red-row" href="mailto:contactowakitokys@gmail.com">
-        <div class="red-icon"><svg width="18" height="14" viewBox="0 0 24 18"><path fill="white" d="M0 0v18h24V0H0zm21.518 2L12 9.713 2.482 2h19.036zM2 16V4.183l10 8.104 10-8.104V16H2z"/></svg></div>
-        <span class="red-label">Contacto</span>
-        <span class="red-handle">mail ↗</span>
-        <span class="red-arrow">↗</span>
-      </a>
-    </div>
+  <section style="padding:clamp(48px,8vw,90px) clamp(18px,4vw,40px);border-bottom:1px solid #1f1f1f">
+    <h2 style="font-family:'Bebas Neue';font-size:clamp(40px,11vw,90px);line-height:.9;border-bottom:1px solid #1f1f1f;padding-bottom:18px;margin-bottom:6px">Encontranos</h2>
+    <div class="redes"></div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section style="padding:clamp(48px,8vw,90px) clamp(18px,4vw,40px);border-bottom:1px solid #1f1f1f;background:#0a0a0a">
+    <div style="font:400 10px 'DM Mono';letter-spacing:.4em;color:#999;text-transform:uppercase;margin-bottom:18px">Newsletter</div>
+    <h2 style="font-family:'Bebas Neue';font-size:clamp(30px,7vw,54px);line-height:.95">Novedades de Wakitokys</h2>
+    <p style="font:300 clamp(16px,2.6vw,20px)/1.4 'Barlow Condensed';color:#999;max-width:46ch;margin-top:12px">Lanzamientos, fechas y merch directo a tu mail. Sin spam.</p>
+    <form action="https://REEMPLAZAR.us1.list-manage.com/subscribe/post?u=XXXX&id=YYYY" method="post" target="_blank" style="display:flex;flex-wrap:wrap;gap:0;margin-top:26px;max-width:480px">
+      <input type="email" name="EMAIL" placeholder="tu@email.com" required style="flex:1;min-width:200px;background:transparent;border:1px solid #fff;border-right:0;color:#fff;padding:15px 16px;font:400 14px 'DM Mono';outline:none">
+      <button type="submit" style="border:1px solid #fff;background:#fff;color:#000;padding:15px 26px;font:400 11px 'DM Mono';letter-spacing:.18em;text-transform:uppercase">Sumarme</button>
+    </form>
   </section>
 
   <!-- FOOTER -->
-  <footer id="footer">
-    <img src="assets/img/logo.png" alt="WKTY" class="footer-wkty" />
-    <div class="footer-tagline reveal">¿A DÓNDE VA?</div>
-    <p class="footer-meta">
-      WAKITOKYS © 2026 · BUENOS AIRES<br/>
-      PRODUCIDO POR GABRIEL BIUSO<br/>
-      DISTRIBUIDO POR ESTUDIO INGA
-    </p>
-    <p class="footer-egg" data-egg-trigger>TOCÁ 5 VECES</p>
+  <footer style="padding:clamp(50px,7vw,80px) clamp(18px,4vw,40px) clamp(110px,14vw,140px);display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center">
+    <div style="font-family:'Bebas Neue';font-size:48px;opacity:.18;letter-spacing:.05em">WKTY</div>
+    <div style="font-family:'Bebas Neue';font-size:clamp(28px,8vw,52px);color:#444;line-height:.95">¿A dónde va?</div>
+    <p style="font:400 9px 'DM Mono';letter-spacing:.3em;color:#555;text-transform:uppercase;line-height:2.2">Wakitokys © 2026 · Buenos Aires<br>contactowakitokys@gmail.com</p>
   </footer>
-</div>
 
-<!-- ═══ PLAYER BAR ═══ -->
-<div id="player-bar" role="region" aria-label="Reproductor">
-  <div class="pb-progress" id="pb-progress"><div class="pb-fill" id="pb-fill"></div></div>
-  <canvas id="viz" aria-hidden="true"></canvas>
-  <div class="pb-row">
-    <div class="pb-cover" id="pb-cover"></div>
-    <div class="pb-info">
-      <div class="pb-name" id="pb-name">—</div>
-      <div class="pb-meta" id="pb-meta"><span class="live-dot"></span> Reproduciendo</div>
-    </div>
-    <div class="pb-controls">
-      <span class="pb-times"><span id="pb-cur">0:00</span> / <span id="pb-total">0:00</span></span>
-      <button class="pb-btn" onclick="prev()" aria-label="Anterior">
-        <svg width="14" height="14" viewBox="0 0 16 16"><path d="M2 2v12M14 3L6 8l8 5V3z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-      </button>
-      <button class="pb-btn main" onclick="toggle()" aria-label="Play/Pause">
-        <svg id="ic-play" width="12" height="14" viewBox="0 0 12 14"><path d="M1 1l11 6-11 6V1z" fill="white"/></svg>
-        <svg id="ic-pause" width="12" height="14" viewBox="0 0 12 14" style="display:none"><rect x="1" y="1" width="4" height="12" rx="1" fill="white"/><rect x="7" y="1" width="4" height="12" rx="1" fill="white"/></svg>
-      </button>
-      <button class="pb-btn" onclick="next()" aria-label="Siguiente">
-        <svg width="14" height="14" viewBox="0 0 16 16"><path d="M14 2v12M2 3l8 5-8 5V3z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-      </button>
+  <!-- STICKY PLAYER -->
+  <div class="pbar" style="position:fixed;left:0;right:0;bottom:0;z-index:300;background:rgba(8,8,8,.94);backdrop-filter:blur(14px) saturate(1.2);border-top:1px solid #1f1f1f">
+    <div class="pb-prog" style="height:2px;background:#1f1f1f;position:relative;cursor:pointer"><div class="pb-fill" style="position:absolute;inset:0 auto 0 0;width:0%;background:#fff"></div></div>
+    <div style="display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:clamp(10px,2vw,16px);padding:10px clamp(18px,4vw,40px)">
+      <img class="pb-cover" src="/assets/img/cover.jpg" alt="" style="width:42px;height:42px;object-fit:cover;flex:none">
+      <div style="min-width:0">
+        <div class="pb-name" style="font:700 clamp(14px,2.2vw,16px)/1.1 'Barlow Condensed';letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Música</div>
+        <div style="font:400 8.5px 'DM Mono';letter-spacing:.22em;color:#999;text-transform:uppercase;display:flex;align-items:center;gap:7px;margin-top:3px"><span style="width:5px;height:5px;border-radius:50%;background:#ff3838;animation:pulse 1.4s ease-in-out infinite"></span><span class="pb-state">En pausa</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:clamp(8px,1.5vw,14px)">
+        <span class="pb-time hide-m" style="font:400 9px 'DM Mono';color:#999;white-space:nowrap">0:00 / 0:00</span>
+        <canvas class="viz-bar hide-m" width="200" height="40" style="width:130px;height:28px"></canvas>
+        <button class="pb-prev" aria-label="Anterior" style="opacity:.7;font-size:13px">⏮</button>
+        <button class="pb-toggle" aria-label="Play" style="width:44px;height:44px;border:1px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px">▶</button>
+        <button class="pb-next" aria-label="Siguiente" style="opacity:.7;font-size:13px">⏭</button>
+      </div>
     </div>
   </div>
+
 </div>
+<script>
+(function(){
+  var tracks = [
+    { n:'01', t:'Música',       d:'3:42', src:'/assets/audio/musica.mp3' },
+    { n:'02', t:'China',        d:'4:10', src:'/assets/audio/china.mp3' },
+    { n:'03', t:'Noganoma',     d:'5:08', src:'/assets/audio/noganoma.mp3' },
+    { n:'04', t:'Trance',       d:'3:55', src:'/assets/audio/trance.mp3' },
+    { n:'05', t:'El Día',       d:'3:30', src:'/assets/audio/el-dia.mp3' },
+    { n:'06', t:'Insomnio',     d:'4:22', src:'/assets/audio/insomnio.mp3' },
+    { n:'07', t:'Cayendo',      d:'4:15', src:'/assets/audio/cayendo.mp3' },
+    { n:'08', t:'Hipnotizadx',  d:'3:18', src:'/assets/audio/hipnotizadx.mp3' },
+  ];
 
-<!-- ═══ LYRICS MODAL ═══ -->
-<div id="lyrics-modal" role="dialog" aria-modal="true" aria-label="Letras">
-  <div class="lm-head">
-    <div>
-      <div class="lm-num" id="lm-num">00</div>
-      <div class="lm-title" id="lm-title">—</div>
-      <div class="lm-num" id="lm-mood" style="margin-top:4px;color:var(--gray-500)">—</div>
-    </div>
-    <button class="lm-close" id="lm-close" aria-label="Cerrar">×</button>
-  </div>
-  <div class="lm-body" id="lm-body"></div>
-</div>
+  /* Tracklist */
+  var tlist = document.querySelector('.tlist');
+  if (tlist) tracks.forEach(function(tk, i) {
+    var row = document.createElement('div');
+    row.className = 'trow';
+    row.dataset.idx = i;
+    row.style.cssText = 'display:flex;align-items:center;gap:16px;padding:16px clamp(18px,4vw,40px);border-top:1px solid #1f1f1f;cursor:pointer;transition:background .2s';
+    row.innerHTML =
+      '<span style="font-family:\'Bebas Neue\';font-size:26px;color:#555;width:34px;flex:none">'+tk.n+'</span>' +
+      '<div class="eq" style="display:flex;align-items:flex-end;gap:2px;height:22px;width:36px;flex:none;opacity:.35">' +
+        '<i style="flex:1;background:#fff;height:60%"></i><i style="flex:1;background:#fff;height:30%"></i><i style="flex:1;background:#fff;height:80%"></i><i style="flex:1;background:#fff;height:50%"></i><i style="flex:1;background:#fff;height:40%"></i>' +
+      '</div>' +
+      '<span style="flex:1;font:700 clamp(15px,2.6vw,21px)/1 \'Barlow Condensed\';letter-spacing:.05em;text-transform:uppercase">'+tk.t+'</span>' +
+      '<span style="font:400 9px \'DM Mono\';letter-spacing:.18em;color:#777">'+tk.d+'</span>';
+    tlist.appendChild(row);
+  });
 
-<!-- ═══ EASTER EGG ═══ -->
-<div id="egg-modal" role="dialog" aria-modal="true">
-  <div class="egg-stack">
-    <span class="egg-eye">★ MENSAJE OCULTO ★</span>
-    <h2 class="egg-title">Sin tiempo,<br/>sin referencias.</h2>
-    <p class="egg-body">Gracias por escuchar con paciencia. Este disco se hizo entre amigxs, sin apuro. Lo mismo te deseamos a vos: que encuentres tu ritmo.</p>
-    <p class="egg-body" style="font-style:italic;color:#555">— Wakitokys, Buenos Aires 2026.</p>
-    <button class="egg-close" onclick="closeEgg()">Cerrar</button>
-  </div>
-</div>
+  /* Discografía grid */
+  var singles = [
+    { t:'Música',        y:'Single · 2023', img:'/assets/img/musica.jpg',         url:'https://open.spotify.com/intl-es/track/7c7hNjmkMbmEFc6Yb9VGOC' },
+    { t:'Noganoma',      y:'Single · 2026', img:'/assets/img/noganoma-2026.jpg',   url:'https://open.spotify.com/intl-es/track/5jQGVp5QKwWMBFHmpxVmJH' },
+    { t:'No Está Más',   y:'Single · 2022', img:'/assets/img/no-esta-mas.jpg',     url:'https://open.spotify.com/intl-es/album/7I7tWjpjn9uNa07F3DFiDV' },
+    { t:'Quiero Volver', y:'Single · 2022', img:'/assets/img/quiero-volver.jpg',   url:'https://open.spotify.com/intl-es/album/2AJJfDpPomXSMxgKBXJqAj' },
+  ];
+  var dgrid = document.querySelector('.dgrid');
+  if (dgrid) {
+    var main = document.createElement('a');
+    main.href = '/discografia/'; main.dataset.rv = '';
+    main.style.cssText = 'opacity:0;transform:translateY(18px);transition:opacity .7s,transform .7s;border:1px solid #1f1f1f;background:#0d0d0d;padding:16px;display:flex;flex-direction:column;gap:11px';
+    main.innerHTML = '<img src="/assets/img/cover.jpg" alt="¿A dónde va?" style="width:100%;aspect-ratio:1;object-fit:cover"><div style="font-family:\'Bebas Neue\';font-size:26px;line-height:.95">¿A dónde va?</div><div style="font:400 9px \'DM Mono\';letter-spacing:.22em;color:#777;text-transform:uppercase">2026 · LP</div>';
+    dgrid.appendChild(main);
+    singles.forEach(function(s) {
+      var c = document.createElement('a');
+      c.href = s.url; c.target = '_blank'; c.rel = 'noopener'; c.dataset.rv = '';
+      c.style.cssText = 'opacity:0;transform:translateY(18px);transition:opacity .7s,transform .7s;border:1px solid #1f1f1f;background:#0d0d0d;padding:16px;display:flex;flex-direction:column;gap:11px';
+      c.innerHTML = '<img src="'+s.img+'" alt="'+s.t+'" style="width:100%;aspect-ratio:1;object-fit:cover"><div style="font-family:\'Bebas Neue\';font-size:26px;line-height:.95">'+s.t+'</div><div style="font:400 9px \'DM Mono\';letter-spacing:.22em;color:#777;text-transform:uppercase">'+s.y+'</div>';
+      dgrid.appendChild(c);
+    });
+  }
 
-<audio id="aud" preload="none" crossorigin="anonymous"></audio>
+  /* Redes */
+  var redesData = [
+    { l:'Spotify',   h:'/wakitokys',  u:'https://open.spotify.com/intl-es/artist/4oZxVaG812abuExHgD0AAI' },
+    { l:'Instagram', h:'@wakitokys',  u:'https://www.instagram.com/wakitokys/' },
+    { l:'YouTube',   h:'/wakitokys',  u:'https://www.youtube.com/@wakitokys/featured' },
+    { l:'TikTok',    h:'@wakitokys',  u:'https://www.tiktok.com/@wakitokys' },
+    { l:'Contacto',  h:'mail',        u:'mailto:contactowakitokys@gmail.com' },
+  ];
+  var rwrap = document.querySelector('.redes');
+  if (rwrap) redesData.forEach(function(rd) {
+    var a = document.createElement('a');
+    a.href = rd.u; a.target = '_blank'; a.rel = 'noopener';
+    a.style.cssText = 'display:flex;align-items:center;gap:16px;padding:20px 0;border-bottom:1px solid #1f1f1f;transition:opacity .2s';
+    a.innerHTML = '<span style="width:38px;height:38px;border:1px solid #555;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:13px">↗</span><span style="font:700 clamp(22px,5vw,30px)/1 \'Barlow Condensed\';letter-spacing:.05em;text-transform:uppercase">'+rd.l+'</span><span style="margin-left:auto;font:400 9px \'DM Mono\';letter-spacing:.22em;color:#999;text-transform:uppercase">'+rd.h+'</span>';
+    a.addEventListener('mouseenter', function(){ a.style.opacity='.6'; });
+    a.addEventListener('mouseleave', function(){ a.style.opacity='1'; });
+    rwrap.appendChild(a);
+  });
 
-<script src="lyrics.js"></script>
-<script src="app.js"></script>
+  /* Scroll reveals */
+  var revItems = document.querySelectorAll('[data-rv]');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='none';io.unobserve(e.target);} }); }, { threshold:0.12 });
+    revItems.forEach(function(el){ io.observe(el); });
+  } else { revItems.forEach(function(el){ el.style.opacity='1'; el.style.transform='none'; }); }
+
+  /* Burger */
+  var burger = document.querySelector('.burger');
+  var mMenu = document.querySelector('.mobile-menu');
+  if (burger && mMenu) {
+    var mOpen = false;
+    var setM = function(v){ mOpen=v; mMenu.style.display=v?'flex':'none'; };
+    burger.addEventListener('click', function(){ setM(!mOpen); });
+    mMenu.querySelectorAll('[data-mclose]').forEach(function(a){ a.addEventListener('click', function(){ setM(false); }); });
+  }
+
+  /* Player */
+  var cur = 0, playing = false;
+  var aud = new Audio();
+  var pbName = document.querySelector('.pb-name');
+  var pbState = document.querySelector('.pb-state');
+  var pbTime = document.querySelector('.pb-time');
+  var pbFill = document.querySelector('.pb-fill');
+  var pbProg = document.querySelector('.pb-prog');
+  var pbToggle = document.querySelector('.pb-toggle');
+  var heroIc = document.querySelector('.hp-ic');
+
+  var toMMSS = function(s){ return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0'); };
+  var durSec = function(str){ var p=str.split(':'); return +p[0]*60 + +p[1]; };
+
+  var selectTrack = function(i) {
+    cur = (i + tracks.length) % tracks.length;
+    document.querySelectorAll('.trow').forEach(function(r,ri){
+      var on = ri===cur;
+      r.style.background = on ? '#121212' : 'transparent';
+      var eq = r.querySelector('.eq');
+      if(eq){ eq.style.opacity = on?'1':'.35'; eq.dataset.on = on?'1':''; }
+    });
+    if(pbName) pbName.textContent = tracks[cur].t;
+    aud.src = tracks[cur].src;
+  };
+
+  var syncIcons = function(){
+    if(pbToggle) pbToggle.textContent = playing ? '❚❚' : '▶';
+    if(heroIc) heroIc.textContent = playing ? '❚❚' : '▶';
+    if(pbState) pbState.textContent = playing ? 'Reproduciendo' : 'En pausa';
+  };
+
+  var playPause = function(){
+    playing = !playing;
+    if(playing){ aud.play().catch(function(){}); } else { aud.pause(); }
+    syncIcons();
+  };
+
+  document.querySelectorAll('.trow').forEach(function(r){
+    r.addEventListener('click', function(){
+      selectTrack(+r.dataset.idx); playing=true; aud.play().catch(function(){}); syncIcons();
+    });
+  });
+  var heroPlay = document.querySelector('.hero-play');
+  if(heroPlay) heroPlay.addEventListener('click', playPause);
+  if(pbToggle) pbToggle.addEventListener('click', playPause);
+  var pbNext = document.querySelector('.pb-next');
+  var pbPrev2 = document.querySelector('.pb-prev');
+  if(pbNext) pbNext.addEventListener('click', function(){ selectTrack(cur+1); if(playing){aud.play().catch(function(){});} });
+  if(pbPrev2) pbPrev2.addEventListener('click', function(){ selectTrack(cur-1); if(playing){aud.play().catch(function(){});} });
+  if(pbProg) pbProg.addEventListener('click', function(e){
+    var rc = pbProg.getBoundingClientRect();
+    aud.currentTime = ((e.clientX-rc.left)/rc.width) * (aud.duration || durSec(tracks[cur].d));
+  });
+  aud.addEventListener('ended', function(){ selectTrack(cur+1); aud.play().catch(function(){}); });
+  aud.addEventListener('timeupdate', function(){
+    var dur = aud.duration || durSec(tracks[cur].d);
+    if(pbFill) pbFill.style.width = (aud.currentTime/dur*100).toFixed(1)+'%';
+    if(pbTime) pbTime.textContent = toMMSS(aud.currentTime)+' / '+tracks[cur].d;
+  });
+
+  selectTrack(0); syncIcons();
+
+  /* Visualizers */
+  var heroWave = document.querySelector('.wave-hero');
+  var vizBar = document.querySelector('.viz-bar');
+  var hc = heroWave && heroWave.getContext('2d');
+  var vc = vizBar && vizBar.getContext('2d');
+
+  var draw = function(){
+    var t = performance.now()/1000;
+    if(hc){
+      var W=heroWave.width, H=heroWave.height;
+      hc.clearRect(0,0,W,H);
+      hc.strokeStyle='#fff'; hc.lineWidth=2; hc.beginPath();
+      for(var x=0;x<=W;x+=4){
+        var amp = playing ? (Math.sin(x*.024+t*3)*.5 + Math.sin(x*.068-t*2)*.3) : .05;
+        var y = H/2 + amp*(H/2-6)*(.5+.5*Math.sin(x*.011+t));
+        x===0 ? hc.moveTo(x,y) : hc.lineTo(x,y);
+      }
+      hc.stroke();
+    }
+    if(vc){
+      var W2=vizBar.width, H2=vizBar.height, n=26, bw=W2/n;
+      vc.clearRect(0,0,W2,H2); vc.fillStyle='#fff';
+      for(var i=0;i<n;i++){
+        var h = playing ? (Math.abs(Math.sin(i*.55+t*6)*Math.cos(i+t*2))*H2*.9+3) : 3;
+        vc.fillRect(i*bw+1, H2-h, bw-2, h);
+      }
+    }
+    var activeEq = document.querySelector('.eq[data-on="1"]');
+    if(activeEq && playing) activeEq.querySelectorAll('i').forEach(function(bar,i){
+      bar.style.height = (25+Math.abs(Math.sin(t*7+i*1.3))*70)+'%';
+    });
+    requestAnimationFrame(draw);
+  };
+  draw();
+})();
+</script>
 </body>
 </html>
