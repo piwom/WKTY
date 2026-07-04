@@ -529,6 +529,68 @@
         .hidden {
             display: none !important;
         }
+
+        /* Sold out screen */
+        .soldout-screen {
+            padding: 36px 22px 32px;
+        }
+
+        .soldout-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--paper);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            margin-bottom: 20px;
+        }
+
+        .soldout-title {
+            font-size: clamp(72px, 20vw, 100px);
+            line-height: 0.84;
+            margin-bottom: 28px;
+        }
+
+        .soldout-text {
+            font-size: 15px;
+            color: var(--paper-dim);
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .waitlist-box {
+            border: 1.5px solid var(--line-strong);
+            padding: 22px;
+        }
+
+        .waitlist-box-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--paper-dim);
+            margin-bottom: 16px;
+        }
+
+        .waitlist-confirm {
+            text-align: center;
+            padding: 24px 0;
+        }
+
+        .waitlist-confirm-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .waitlist-confirm-text {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ok);
+        }
     </style>
 </head>
 <body>
@@ -601,6 +663,47 @@
                 </div>
             </div>
             <div style="height: 24px;"></div>
+        </div>
+
+        <!-- SOLD OUT VIEW -->
+        <div id="soldoutView" class="hidden">
+            <div class="soldout-screen">
+                <header>
+                    <img src="/entradas/wkty-blanco.png" alt="WAKITOKYS" style="height: clamp(80px, 20vw, 120px); display: block; margin: 0 0 20px;">
+                </header>
+                <div class="soldout-badge">Entradas agotadas</div>
+                <h2 class="display soldout-title">AGO<br>TADO.</h2>
+                <p class="soldout-text">
+                    Las 200 entradas ya fueron reservadas.<br>
+                    Dejá tu email y te avisamos si se libera algún lugar.
+                </p>
+
+                <div class="waitlist-box">
+                    <div class="waitlist-box-label">─── Lista de espera ───</div>
+
+                    <div id="waitlistForm">
+                        <div class="field" style="margin-bottom: 18px;">
+                            <label>Tu email</label>
+                            <input type="email" id="waitlistEmail" placeholder="vos@correo.com" autocomplete="email">
+                        </div>
+                        <button class="btn-hard display" id="waitlistBtn">
+                            Avisame si se libera ↦
+                        </button>
+                    </div>
+
+                    <div id="waitlistConfirm" class="waitlist-confirm hidden">
+                        <div class="waitlist-confirm-icon">✓</div>
+                        <div class="waitlist-confirm-text">Te avisamos si hay lugar</div>
+                    </div>
+                </div>
+
+                <div class="marquee-container" style="margin-top: 32px;">
+                    <div class="marquee-track">
+                        <span>★ WAKITOKYS · ¿A DÓNDE VA? · MIE 08·07 · 21H · TANQUE CULTURAL · ACASSUSO 6930 · CABA · </span>
+                        <span>★ WAKITOKYS · ¿A DÓNDE VA? · MIE 08·07 · 21H · TANQUE CULTURAL · ACASSUSO 6930 · CABA · </span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- SUCCESS VIEW CON TICKET -->
@@ -692,14 +795,43 @@
     <script>
         // CONFIGURACIÓN - REEMPLAZÁ CON TU URL DE GOOGLE APPS SCRIPT
         const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbwR2fuZMsD15YHQJR7aHjnAl-MDyQkrxtLC4IIxssC9hTCUOigGfhIzLa0aLeAKum3y/exec';
+        const TICKET_LIMIT = 200;
 
         const formView = document.getElementById('formView');
         const successView = document.getElementById('successView');
+        const soldoutView = document.getElementById('soldoutView');
         const form = document.getElementById('ticketForm');
         const errorDiv = document.getElementById('error');
         const loadingDiv = document.getElementById('loading');
-        
+
         let quantity = 1;
+
+        // Chequear disponibilidad al cargar
+        async function checkAvailability() {
+            try {
+                const res = await fetch(SHEETS_API_URL);
+                const data = await res.json();
+                if (data.success && data.tickets) {
+                    const total = data.tickets.reduce((sum, t) => sum + (parseInt(t.cantidad) || 0), 0);
+                    if (total >= TICKET_LIMIT) {
+                        showSoldOut();
+                        return true;
+                    }
+                }
+            } catch (e) {
+                // Si falla el chequeo, dejamos ver el form
+            }
+            return false;
+        }
+
+        function showSoldOut() {
+            formView.classList.add('hidden');
+            successView.classList.add('hidden');
+            soldoutView.classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        checkAvailability();
 
         // Quantity controls
         document.getElementById('qtyMinus').addEventListener('click', () => {
@@ -746,6 +878,24 @@
             }
         }
 
+        // Waitlist button
+        document.getElementById('waitlistBtn').addEventListener('click', async () => {
+            const email = document.getElementById('waitlistEmail').value.trim();
+            if (!email) return;
+            const btn = document.getElementById('waitlistBtn');
+            btn.disabled = true;
+            try {
+                await fetch(SHEETS_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'waitlist', email, timestamp: new Date().toISOString() })
+                });
+            } catch (e) {}
+            document.getElementById('waitlistForm').classList.add('hidden');
+            document.getElementById('waitlistConfirm').classList.remove('hidden');
+        });
+
         // Submit form
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -757,6 +907,10 @@
                 showError('Por favor completá todos los campos');
                 return;
             }
+
+            // Chequear disponibilidad antes de procesar
+            const agotado = await checkAvailability();
+            if (agotado) return;
 
             const ticketId = generateId();
 
