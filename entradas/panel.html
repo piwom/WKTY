@@ -607,10 +607,10 @@
 
         function updateStats() {
             const total = tickets.length;
-            const entradas = tickets.reduce((sum, t) => sum + parseInt(t.cantidad), 0);
+            const entradas = tickets.reduce((sum, t) => sum + (parseInt(t.cantidad) || 0), 0);
             const ingresados = tickets
                 .filter(t => t.ingresado)
-                .reduce((sum, t) => sum + parseInt(t.cantidad), 0);
+                .reduce((sum, t) => sum + (parseInt(t.cantidad) || 0), 0);
 
             document.getElementById('totalReservas').textContent = total;
             document.getElementById('totalEntradas').textContent = entradas;
