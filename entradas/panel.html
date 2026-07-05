@@ -448,12 +448,12 @@
             letter-spacing: 0.14em;
         }
 
-        .badge.pendiente {
+        .badge.no-ingreso {
             background: var(--warn);
             color: var(--ink);
         }
 
-        .badge.usado {
+        .badge.ingreso {
             background: transparent;
             border: 1.5px solid var(--line-strong);
             color: var(--paper-dim);
@@ -568,7 +568,7 @@
     </div>
 
     <script>
-        const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbwR2fuZMsD15YHQJR7aHjnAl-MDyQkrxtLC4IIxssC9hTCUOigGfhIzLa0aLeAKum3y/exec';
+        const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbygfFMshyeRdEj6eS8S11Fhlfa6zPL1tf_PYair8KkHOVwqwAKutiZhyFu4F2gHxwG8/exec';
         const PASSWORD = 'wkty';
 
         let tickets = [];
@@ -609,7 +609,7 @@
             const total = tickets.length;
             const entradas = tickets.reduce((sum, t) => sum + parseInt(t.cantidad), 0);
             const ingresados = tickets
-                .filter(t => t.estado === 'usado')
+                .filter(t => t.ingresado)
                 .reduce((sum, t) => sum + parseInt(t.cantidad), 0);
 
             document.getElementById('totalReservas').textContent = total;
@@ -652,7 +652,7 @@
                 return;
             }
 
-            if (ticket.estado === 'usado') {
+            if (ticket.ingresado) {
                 resultDiv.className = 'result active warning';
                 resultDiv.innerHTML = `
                     <div class="result-content">
@@ -695,7 +695,7 @@
                 });
 
                 const ticket = tickets.find(t => t.id === ticketId);
-                if (ticket) ticket.estado = 'usado';
+                if (ticket) ticket.ingresado = true;
 
                 updateStats();
                 renderTicketList();
@@ -739,14 +739,15 @@
             }
 
             resultsDiv.innerHTML = results.map(ticket => `
-                <div class="ticket-item ${ticket.estado}">
+                <div class="ticket-item ${ticket.ingresado ? 'usado' : ''}">
                     <div class="ticket-info">
                         <h4>${ticket.nombre}</h4>
                         <p>${ticket.cantidad} entrada${ticket.cantidad > 1 ? 's' : ''} · ${ticket.email}</p>
+                        <p style="margin-top:3px;font-size:10px;opacity:0.5;">${ticket.estado}</p>
                     </div>
-                    <span class="badge ${ticket.estado}">${ticket.estado}</span>
+                    <span class="badge ${ticket.ingresado ? 'ingreso' : 'no-ingreso'}">${ticket.ingresado ? 'INGRESÓ' : 'NO INGRESÓ'}</span>
                 </div>
-                ${ticket.estado === 'pendiente' ? `<button class="action-btn" onclick="markAsUsed('${ticket.id}')">Marcar como usado</button>` : ''}
+                ${!ticket.ingresado ? `<button class="action-btn" onclick="markAsUsed('${ticket.id}')">MARCAR COMO USADO</button>` : ''}
             `).join('');
         });
 
@@ -760,14 +761,15 @@
             }
 
             listDiv.innerHTML = tickets
-                .sort((a, b) => a.estado === 'usado' ? 1 : -1)
+                .sort((a, b) => a.ingresado ? 1 : -1)
                 .map(ticket => `
-                    <div class="ticket-item ${ticket.estado}">
+                    <div class="ticket-item ${ticket.ingresado ? 'usado' : ''}">
                         <div class="ticket-info">
                             <h4>${ticket.nombre}</h4>
                             <p>${ticket.cantidad} entrada${ticket.cantidad > 1 ? 's' : ''} · ${ticket.email}</p>
+                            <p style="margin-top:3px;font-size:10px;opacity:0.5;">${ticket.estado}</p>
                         </div>
-                        <span class="badge ${ticket.estado}">${ticket.estado}</span>
+                        <span class="badge ${ticket.ingresado ? 'ingreso' : 'no-ingreso'}">${ticket.ingresado ? 'INGRESÓ' : 'NO INGRESÓ'}</span>
                     </div>
                 `).join('');
         }
