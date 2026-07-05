@@ -169,53 +169,28 @@
     </div>
 
     <script>
-        const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbwR2fuZMsD15YHQJR7aHjnAl-MDyQkrxtLC4IIxssC9hTCUOigGfhIzLa0aLeAKum3y/exec';
-
         function show(id) {
             document.querySelectorAll('.state').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
 
-        async function init() {
+        function init() {
             const params = new URLSearchParams(window.location.search);
-            const email = params.get('e');
-            const reenviar = params.get('reenviar');
+            const resultado = params.get('resultado');
             const count = parseInt(params.get('c'));
 
-            if (!email) { show('stateError'); return; }
-
-            // Reenvío de QR
-            if (reenviar === '1') {
-                try {
-                    await fetch(SHEETS_API_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'reenviarQR', email: email })
-                    });
-                } catch (e) {}
+            if (resultado === 'ok') {
+                if (count > 0) {
+                    const sub = document.getElementById('subSi');
+                    const plural = count === 1 ? 'entrada confirmada' : 'entradas confirmadas';
+                    sub.innerHTML = count + ' ' + plural + '. Llevá tu QR el día del show.';
+                }
+                show(count === 0 ? 'stateNo' : 'stateSi');
+            } else if (resultado === 'qr') {
                 show('stateQR');
-                return;
+            } else {
+                show('stateError');
             }
-
-            if (isNaN(count)) { show('stateError'); return; }
-
-            if (count > 0) {
-                const sub = document.getElementById('subSi');
-                const plural = count === 1 ? 'entrada confirmada' : 'entradas confirmadas';
-                sub.innerHTML = count + ' ' + plural + '. Llevá tu QR el día del show.';
-            }
-
-            try {
-                await fetch(SHEETS_API_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'confirmar', email: email, count: count })
-                });
-            } catch (e) {}
-
-            show(count === 0 ? 'stateNo' : 'stateSi');
         }
 
         init();
