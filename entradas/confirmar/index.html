@@ -169,28 +169,42 @@
     </div>
 
     <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwR2fuZMsD15YHQJR7aHjnAl-MDyQkrxtLC4IIxssC9hTCUOigGfhIzLa0aLeAKum3y/exec';
+
         function show(id) {
             document.querySelectorAll('.state').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
 
-        function init() {
+        async function init() {
             const params = new URLSearchParams(window.location.search);
-            const resultado = params.get('resultado');
+            const email = params.get('e');
             const count = parseInt(params.get('c'));
+            const reenviar = params.get('reenviar');
 
-            if (resultado === 'ok') {
-                if (count > 0) {
-                    const sub = document.getElementById('subSi');
-                    const plural = count === 1 ? 'entrada confirmada' : 'entradas confirmadas';
-                    sub.innerHTML = count + ' ' + plural + '. Llevá tu QR el día del show.';
-                }
-                show(count === 0 ? 'stateNo' : 'stateSi');
-            } else if (resultado === 'qr') {
+            if (!email) { show('stateError'); return; }
+
+            if (reenviar === '1') {
+                try {
+                    await fetch(SCRIPT_URL + '?action=reenviarQR&e=' + encodeURIComponent(email));
+                } catch(err) {}
                 show('stateQR');
-            } else {
-                show('stateError');
+                return;
             }
+
+            if (isNaN(count)) { show('stateError'); return; }
+
+            if (count > 0) {
+                const sub = document.getElementById('subSi');
+                const plural = count === 1 ? 'entrada confirmada' : 'entradas confirmadas';
+                sub.innerHTML = count + ' ' + plural + '. Llevá tu QR el día del show.';
+            }
+
+            try {
+                await fetch(SCRIPT_URL + '?action=confirmar&e=' + encodeURIComponent(email) + '&c=' + count);
+            } catch(err) {}
+
+            show(count === 0 ? 'stateNo' : 'stateSi');
         }
 
         init();
