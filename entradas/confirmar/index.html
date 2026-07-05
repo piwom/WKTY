@@ -186,7 +186,7 @@
 
             if (reenviar === '1') {
                 try {
-                    await fetch(SCRIPT_URL + '?action=reenviarQR&e=' + encodeURIComponent(email));
+                    await fetch(SCRIPT_URL + '?action=reenviarQR&e=' + encodeURIComponent(email), { mode: 'no-cors' });
                 } catch(err) {}
                 show('stateQR');
                 return;
@@ -201,7 +201,7 @@
             }
 
             try {
-                await fetch(SCRIPT_URL + '?action=confirmar&e=' + encodeURIComponent(email) + '&c=' + count);
+                await fetch(SCRIPT_URL + '?action=confirmar&e=' + encodeURIComponent(email) + '&c=' + count, { mode: 'no-cors' });
             } catch(err) {}
 
             show(count === 0 ? 'stateNo' : 'stateSi');
