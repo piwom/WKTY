@@ -811,7 +811,7 @@
             try {
                 const res = await fetch(SHEETS_API_URL);
                 const data = await res.json();
-                if (data.success && data.tickets) {
+                if (data.tickets) {
                     const total = data.tickets.reduce((sum, t) => sum + (parseInt(t.cantidad) || 0), 0);
                     if (total >= TICKET_LIMIT) {
                         showSoldOut();
