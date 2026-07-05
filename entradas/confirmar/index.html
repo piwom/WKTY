@@ -142,7 +142,7 @@
         <div class="state" id="stateSi">
             <div class="badge-ok">✓ Confirmado</div>
             <div class="big-title">NOS<br>VEMOS<br>AHÍ.</div>
-            <p class="sub">Tu lugar está reservado.<br>Llevá tu QR el día del show.</p>
+            <p class="sub" id="subSi">Tu lugar está reservado.<br>Llevá tu QR el día del show.</p>
             <div class="event-pill">MIE 08·07 · 21H · TANQUE CULTURAL</div>
         </div>
 
@@ -170,12 +170,19 @@
 
         async function init() {
             const params = new URLSearchParams(window.location.search);
-            const ticketId = params.get('id');
-            const respuesta = params.get('r'); // 'si' o 'no'
+            const email = params.get('e');
+            const count = parseInt(params.get('c'));
 
-            if (!ticketId || !respuesta) {
+            if (!email || isNaN(count)) {
                 show('stateError');
                 return;
+            }
+
+            // Actualizar texto según cantidad
+            if (count > 0) {
+                const sub = document.getElementById('subSi');
+                const plural = count === 1 ? 'entrada confirmada' : 'entradas confirmadas';
+                sub.innerHTML = count + ' ' + plural + '. Llevá tu QR el día del show.';
             }
 
             try {
@@ -185,15 +192,13 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         action: 'confirmar',
-                        id: ticketId,
-                        respuesta: respuesta
+                        email: email,
+                        count: count
                     })
                 });
+            } catch (e) {}
 
-                show(respuesta === 'si' ? 'stateSi' : 'stateNo');
-            } catch (e) {
-                show(respuesta === 'si' ? 'stateSi' : 'stateNo');
-            }
+            show(count === 0 ? 'stateNo' : 'stateSi');
         }
 
         init();
