@@ -544,6 +544,7 @@
                 <button class="tab active" onclick="switchTab('scan', event)">Escanear QR</button>
                 <button class="tab" onclick="switchTab('search', event)">Buscar</button>
                 <button class="tab" onclick="switchTab('list', event)">Listado</button>
+                <button class="tab" onclick="switchTab('add', event)">+ Agregar</button>
             </div>
 
             <!-- TAB: SCAN -->
@@ -562,6 +563,31 @@
             <div class="tab-content" id="listTab">
                 <div class="ticket-list" id="ticketList">
                     <div class="loading">Cargando...</div>
+                </div>
+            </div>
+
+            <!-- TAB: AGREGAR -->
+            <div class="tab-content" id="addTab">
+                <div style="max-width:400px;">
+                    <div class="password-field" style="margin-bottom:20px;">
+                        <label>Nombre completo *</label>
+                        <input type="text" id="addNombre" placeholder="Nombre Apellido" style="background:transparent;border:none;border-bottom:1.5px solid rgba(242,237,227,0.32);color:#F2EDE3;font-family:var(--font-body);font-size:18px;padding:10px 0 12px;outline:none;width:100%;">
+                    </div>
+                    <div class="password-field" style="margin-bottom:20px;">
+                        <label>Email (opcional, para mandar QR)</label>
+                        <input type="email" id="addEmail" placeholder="email@ejemplo.com" style="background:transparent;border:none;border-bottom:1.5px solid rgba(242,237,227,0.32);color:#F2EDE3;font-family:var(--font-body);font-size:18px;padding:10px 0 12px;outline:none;width:100%;">
+                    </div>
+                    <div class="password-field" style="margin-bottom:28px;">
+                        <label>Cantidad de entradas</label>
+                        <select id="addCantidad" style="background:#0A0A0A;border:none;border-bottom:1.5px solid rgba(242,237,227,0.32);color:#F2EDE3;font-family:var(--font-body);font-size:18px;padding:10px 0 12px;outline:none;width:100%;">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                    </div>
+                    <button class="btn-hard" onclick="agregarManual()" id="addBtn">REGISTRAR</button>
+                    <div id="addMsg" style="margin-top:16px;font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;display:none;"></div>
                 </div>
             </div>
         </div>
@@ -789,6 +815,49 @@
             }
 
             if (tabName === 'list') loadTickets();
+        }
+
+        async function agregarManual() {
+            const nombre = document.getElementById('addNombre').value.trim();
+            const email = document.getElementById('addEmail').value.trim();
+            const cantidad = parseInt(document.getElementById('addCantidad').value);
+            const msg = document.getElementById('addMsg');
+            const btn = document.getElementById('addBtn');
+
+            if (!nombre) {
+                msg.style.color = '#FF3D2E';
+                msg.textContent = 'El nombre es obligatorio.';
+                msg.style.display = 'block';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'REGISTRANDO...';
+            msg.style.display = 'none';
+
+            try {
+                await fetch(SHEETS_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'agregarManual', nombre, email, cantidad })
+                });
+
+                msg.style.color = '#B6FF3A';
+                msg.textContent = '✓ Registrado' + (email ? ' · QR enviado por mail' : '') + '.';
+                msg.style.display = 'block';
+                document.getElementById('addNombre').value = '';
+                document.getElementById('addEmail').value = '';
+                document.getElementById('addCantidad').value = '1';
+                await loadTickets();
+            } catch(err) {
+                msg.style.color = '#FF3D2E';
+                msg.textContent = 'Error. Intentá de nuevo.';
+                msg.style.display = 'block';
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'REGISTRAR';
         }
 
         setInterval(loadTickets, 30000);
