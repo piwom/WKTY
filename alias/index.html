@@ -3,80 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pagale a Wakitokys</title>
-<meta name="description" content="Alias de pago de Wakitokys: wkty.mp">
+<title>Alias — Wakitokys</title>
 <link rel="icon" type="image/png" href="/assets/img/logo.png">
 <!-- Google tag (gtag.js) --><script async src="https://www.googletagmanager.com/gtag/js?id=G-R2Y36V1SLX"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-R2Y36V1SLX");</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Barlow+Condensed:wght@300;400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{background:#000;color:#fff;font-family:'DM Mono',ui-monospace,monospace;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:32px 24px;gap:0}
-  .logo{height:32px;width:auto;margin-bottom:36px;opacity:.7}
-  .label{font:400 10px 'DM Mono';letter-spacing:.4em;color:#555;text-transform:uppercase;margin-bottom:20px}
-  .alias-box{border:1px solid #333;padding:28px 40px;display:flex;flex-direction:column;align-items:center;gap:16px;width:100%;max-width:340px}
-  .qr{width:200px;height:200px;display:block}
-  .alias{font-family:'Bebas Neue';font-size:48px;letter-spacing:.04em;line-height:1}
-  .copy-btn{border:1px solid #fff;background:none;color:#fff;font:400 10px 'DM Mono';letter-spacing:.28em;text-transform:uppercase;padding:12px 28px;cursor:pointer;transition:background .2s,color .2s;width:100%}
-  .copy-btn:hover{background:#fff;color:#000}
-  .copy-btn.copied{background:#fff;color:#000}
-  .instruccion{font:300 13px/1.6 'Barlow Condensed';letter-spacing:.04em;color:#777;text-align:center;max-width:300px;margin-top:24px}
-  .instruccion strong{color:#bbb;font-weight:400}
-  .footer{font:400 9px 'DM Mono';letter-spacing:.3em;color:#333;text-transform:uppercase;margin-top:40px}
+  body{background:#000;color:#fff;font-family:'DM Mono',ui-monospace,monospace;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:20px;padding:40px 24px}
+  .label{font:400 10px 'DM Mono';letter-spacing:.4em;color:#555;text-transform:uppercase}
+  .alias{font-family:'Bebas Neue';font-size:clamp(64px,20vw,120px);letter-spacing:.04em;line-height:1}
+  .copy-btn{border:1px solid #fff;background:none;color:#fff;font:400 11px 'DM Mono';letter-spacing:.28em;text-transform:uppercase;padding:16px 40px;cursor:pointer;transition:background .2s,color .2s;margin-top:8px}
+  .copy-btn:hover,.copy-btn.copied{background:#fff;color:#000}
 </style>
 </head>
 <body>
-
-<img src="/assets/img/wkty-blanco.png" alt="Wakitokys" class="logo">
-
-<div class="label">— alias de pago —</div>
-
-<div class="alias-box">
-  <!-- QR generado inline via API pública, sin dependencias -->
-  <img
-    class="qr"
-    src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&bgcolor=000000&color=ffffff&data=wkty.mp"
-    alt="QR del alias wkty.mp"
-  >
+  <div class="label">alias</div>
   <div class="alias">wkty.mp</div>
   <button class="copy-btn" id="copyBtn" onclick="copiar()">Copiar alias →</button>
-</div>
-
-<p class="instruccion">
-  Abrí tu <strong>billetera virtual o home banking</strong>,<br>
-  buscá la opción de transferir y pegá el alias.<br>
-  ¡Gracias por bancar la música! 🖤
-</p>
-
-<div class="footer">Wakitokys · Buenos Aires · 2026</div>
-
 <script>
-function copiar() {
-  navigator.clipboard.writeText('wkty.mp').then(function() {
-    var btn = document.getElementById('copyBtn');
-    btn.textContent = '¡Copiado!';
-    btn.classList.add('copied');
-    setTimeout(function() {
-      btn.textContent = 'Copiar alias →';
-      btn.classList.remove('copied');
-    }, 2000);
-  }).catch(function() {
-    // fallback para browsers viejos
-    var ta = document.createElement('textarea');
-    ta.value = 'wkty.mp';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    var btn = document.getElementById('copyBtn');
-    btn.textContent = '¡Copiado!';
-    btn.classList.add('copied');
-    setTimeout(function() {
-      btn.textContent = 'Copiar alias →';
-      btn.classList.remove('copied');
-    }, 2000);
+function copiar(){
+  navigator.clipboard.writeText('wkty.mp').then(function(){
+    var b=document.getElementById('copyBtn');
+    b.textContent='¡Copiado!';b.classList.add('copied');
+    setTimeout(function(){b.textContent='Copiar alias →';b.classList.remove('copied');},2000);
   });
 }
 </script>
