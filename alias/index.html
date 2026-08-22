@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alias — Wakitokys</title>
+<link rel="icon" type="image/png" href="/assets/img/logo.png">
+<!-- Google tag (gtag.js) --><script async src="https://www.googletagmanager.com/gtag/js?id=G-R2Y36V1SLX"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-R2Y36V1SLX");</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#000;color:#fff;font-family:'DM Mono',ui-monospace,monospace;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:20px;padding:40px 24px}
+  .label{font:400 10px 'DM Mono';letter-spacing:.4em;color:#555;text-transform:uppercase}
+  .alias{font-family:'Bebas Neue';font-size:clamp(64px,20vw,120px);letter-spacing:.04em;line-height:1}
+  .copy-btn{border:1px solid #fff;background:none;color:#fff;font:400 11px 'DM Mono';letter-spacing:.28em;text-transform:uppercase;padding:16px 40px;cursor:pointer;transition:background .2s,color .2s;margin-top:8px}
+  .copy-btn:hover,.copy-btn.copied{background:#fff;color:#000}
+</style>
+</head>
+<body>
+  <div class="label">alias</div>
+  <div class="alias">wkty.mp</div>
+  <button class="copy-btn" id="copyBtn" onclick="copiar()">Copiar alias →</button>
+<script>
+function copiar(){
+  navigator.clipboard.writeText('wkty.mp').then(function(){
+    var b=document.getElementById('copyBtn');
+    b.textContent='¡Copiado!';b.classList.add('copied');
+    setTimeout(function(){b.textContent='Copiar alias →';b.classList.remove('copied');},2000);
+  });
+}
+</script>
+</body>
+</html>
